@@ -1,5 +1,7 @@
 'use strict';
 
+alert('?');
+
 let a = 3;
 
 a = a * 2;
