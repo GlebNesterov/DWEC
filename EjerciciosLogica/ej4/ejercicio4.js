@@ -5,16 +5,16 @@ let lados = 0;
 function rect (lados){
     let resultado = [];
 
-    for (let i = 0; i <= lados; ++i){
+    for (let i = 1; i <= lados; ++i){
         let fila = '';
-        for (let j = 0; j <= i; ++j){
-            if(i === 0 || i === lados - 1 || j === 0 || j === lados - 1){
-                fila += '*';
-            }else{
-                fila += ' ';
-            }
+        for (let j = 1; j <= lados - i; ++j){
+            fila += ' ';
         }
-        resultado[i] = fila + '*';
+        for (let k = 1; k < (2 * i - 1); ++k){
+            fila += '*';
+        }
+
+        resultado[i] = fila + '* ';
     }
     return resultado;
 }
