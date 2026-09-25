@@ -1,0 +1,40 @@
+'use strict';
+
+let lados = 0;
+
+function romb (lados){
+    let resultado = [];
+
+    for (let i = 1; i <= lados; ++i){
+        let fila = '';
+
+        for (let j = 1; j <= lados - i; ++j){
+            fila += ' ';
+        }
+        for (let k = 1; k < (2 * i - 1); ++k){
+            fila += '*';
+        }
+
+        resultado[i] = fila + '* ';
+    }
+    for (let i = lados; i >= 1; ++i){
+        let fila = '';
+
+        for (let j = lados; j >= 1 + i; ++j){
+            fila += ' ';
+        }
+        for (let k = (2 * i - 1); k >= 1; ++k){
+            fila += '*';
+        }
+
+        resultado[i] = fila + '* ';
+    }
+    return resultado;
+}
+
+
+lados = parseInt(prompt('Longitud :'));
+
+let res = romb(lados);
+//alert(res.join('\n'));
+console.log(res.join('\n'));
