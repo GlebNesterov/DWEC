@@ -8,7 +8,7 @@ function multiplo (min, max){
     let mult3 = [];
     let mult5 = [];
     let primo = [];
-    for (min; min < max; ++min) {
+    for (min; min <= max; ++min) {
         if((min % 3) === 0){
             mult3.push(min);
         }
@@ -16,15 +16,16 @@ function multiplo (min, max){
             mult5.push(min);
         }
         if(min === 2){
-            primo.push();
+            primo.push(min);
         }
-        if(min % ){
-
+        if(min % min == 0 && (min + 1) % min == 1){
+            primo.push(min);
         }
-        
+        console.log('Múltiplos de 3' , mult3);
+        console.log('Múltiplos de 5' , mult5);
+        console.log('Primos' , primo);
     }
-    console.log('Múltiplos de 3' , mult3);
-    console.log('Múltiplos de 5' , mult5);
-    console.log('Primos' , primo);
+
+    multiplo(min, max);
 
 }
