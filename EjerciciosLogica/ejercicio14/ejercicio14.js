@@ -51,7 +51,7 @@ function imprimir(alumnos) {
     for (const i in alumnos) {
         console.log(i + '-' +
             'Nombre: ' + alumnos[i].nombre +
-            ' - Media: ' + alumnos[i].media
+            ' - Media: ' + alumnos[i](gestAcadem(alumnos).media)
         );
     }
 }
