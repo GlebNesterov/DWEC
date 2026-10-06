@@ -1,23 +1,202 @@
 
 
-.fila{
-    display: flex;
+:root {
+    --bg: #f4f7fb;
+    --panel: #ffffff;
+    --primary: #2e7d32;
+    --primary-dark: #1b5e20;
+    --accent: #f39c12;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: #dfe7f1;
+    --shadow: rgba(15, 23, 42, 0.12);
 }
 
-.fila>div{
-    flex: 1;
-    border: 2px solid #0000;
-    padding: 4px;
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 32px 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #eef6f1 0%, var(--bg) 100%);
+    color: var(--text);
+}
+
+.tabla,
+form {
+    width: min(960px, 100%);
+    margin: 0 auto;
+}
+
+.tabla {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 14px 35px var(--shadow);
+}
+
+.fila {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1fr 1.4fr;
+    align-items: center;
+}
+
+.fila > div {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.cabecera{
-    font-weight: bold;
-    border: 2px #0000;
+.fila > div:last-child {
+    border-right: none;
 }
 
-.tabla{
-    border: 1px solid black;
+#filas .fila:nth-child(even) {
+    background: #f9fbfd;
+}
+
+.cabecera {
+    font-weight: 700;
+    background: linear-gradient(135deg, #e8f5e9, #dfeef8);
+    color: var(--text);
+}
+
+.cabecera > div {
+    justify-content: center;
+    font-size: 0.96rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+form {
+    margin-top: 24px;
+    display: grid;
+    gap: 20px;
+}
+
+.seccion {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px 22px;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    max-width: 420px;
+    padding: 11px 12px;
+    margin-bottom: 14px;
+    border: 1px solid #c8d3e0;
+    border-radius: 10px;
+    background: #fdfefe;
+    font-size: 1rem;
+    color: var(--text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.12);
+}
+
+input[type="button"] {
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    min-width: 120px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    box-shadow: 0 8px 18px rgba(46, 125, 50, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+input[type="button"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
+}
+
+#ordenarAsc,
+#ordenarDesc {
+    background: linear-gradient(135deg, var(--accent), #e67e22);
+    min-width: 90px;
+}
+
+.mensajeBu,
+.mensajeElim,
+.nombreAg,
+.actualizando {
+    min-height: 24px;
+    margin: 8px 0 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.mensajeElim {
+    color: #b45309;
+}
+
+.mensajeBu {
+    color: #1d4ed8;
+}
+
+.nombreAg,
+.actualizando {
+    color: var(--primary-dark);
+}
+
+#categoriaOrd {
+    max-width: 260px;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 20px 12px;
+    }
+
+    .fila {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .cabecera {
+        display: none;
+    }
+
+    .fila > div {
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    .fila > div:nth-child(odd) {
+        border-right: 1px solid var(--line);
+    }
+
+    input[type="button"] {
+        width: 100%;
+        margin-top: 8px;
+    }
 }
