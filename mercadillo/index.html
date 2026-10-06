@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mercadillo</title>
     <link rel="stylesheet" href="./style.css" />
-    <script src="./script.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>  
     <div class="tabla">
@@ -18,7 +18,7 @@
         <div id="filas"></div>
     </div>
     <br><br>
-    <form action="./script.js">
+    <form>
         <input type="button" id="ordenarDesc" value="Des">
         <input type="button" id="ordenarAsc" value="Asc">
         <br>
@@ -30,16 +30,16 @@
 
             <label for="nombreA">Nombre</label><br>
             <input type="text" id="nombreA"><br>
-            <p class="nombreAg"></p>
+            <p id="mensajeAg"></p>
 
             <label for="cantidad">Cantidad</label><br>
             <input type="number" id="cantidad" min="0"><br>
 
             <label for="precio">Precio</label><br>
-            <input type="text" id="precio" ><br>
+            <input type="number" id="precio" step="0.1" min="0"><br>
 
             <label for="categoria">Categoria</label><br>
-            <input type="text" id="precio"><br>
+            <input type="text" id="categoria"><br>
             
             <br><input type="button" id="agregar" value="Agregar">
         </section>
@@ -51,7 +51,7 @@
             <input type="text" id="nombreE"><br><br>
             <input type="button" id="eliminar" value="Eliminar">
             <br>
-            <p class="mensajeElim"></p>
+            <p id="mensajeElim"></p>
         </section>
         <br><br>
 
@@ -59,7 +59,7 @@
         <section class="seccion">
             <label for="">Nombre de producto a buscar</label><br><br>
             <input type="text" id="nombreB"><br><br>
-            <p class="mensajeBu"></p><br>
+            <p id="mensajeBu"></p><br>
 
             <input type="button" id="buscar" value="Buscar">
             
@@ -68,18 +68,19 @@
 
         <!--actualizar-->
         <section class="seccion">
-            <p class="actualizando"></p>
+            <label for="">Actualizar Producto</label><br>   
             <label for="nombreAct">Nombre</label><br><br>
             <input type="text" id="nombreAct"><br><br>
             <label for="cantidadAct">Cantidad</label><br><br>
             <input type="text" id="cantidadAct"><br><br>
 
+            <p id="actualizando"></p>
 
             <input type="button" id="actualizar" value="Actualizar">
         </section>
 
         <section class="seccion">
-            <label for="categoriaOrd"></label>
+            <label for="categoriaOrd">Escribe la categoria</label><br>
             <input type="text" id="categoriaOrd">
             <input type="button" id="aceptar" value="Aceptar">
         </section>

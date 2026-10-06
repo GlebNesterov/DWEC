@@ -6,7 +6,7 @@ const eliminar = document.getElementById('eliminar');
 const buscar = document.getElementById('buscar');
 const actualizar = document.getElementById('actualizar');
 const ordenarAsc = document.getElementById('ordenarAsc');
-const ordenaeDesc = document.getElementById('ordenarDesc');
+const ordenarDesc = document.getElementById('ordenarDesc');
 const aceptar = document.getElementById('aceptar');
 
 let ordenActual = null;
