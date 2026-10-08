@@ -34,22 +34,9 @@
     El formato de los datos y presentación es independiente de $negocio.
 */
 
- 
-
-const agregar = document.getElementById('agregar');
-const eliminar = document.getElementById('eliminar');
-const buscar = document.getElementById('buscar');
-const actualizar = document.getElementById('actualizar');
-const ordenarAsc = document.getElementById('ordenarAsc');
-const ordenarDesc = document.getElementById('ordenarDesc');
-const aceptar = document.getElementById('aceptar');
 
 
 const $negocio = (function (){
-
-    let ordenActual = null;
-    let categoriaActual = '';
-
     let productos = {
         platano : {cantidad : 3, precio : 0.5, categoria : 'comida'},
         teclado : {cantidad : 1, precio : 75, categoria : 'accesorio'},
@@ -57,160 +44,165 @@ const $negocio = (function (){
         tomate : {cantidad : 4, precio : 0.65, categoria: 'comida'}
     }
 
+
     // agregar producto
     function agregarProducto(nombre, cantidad, precio, categoria){
-        let mensajeAg = document.getElementById('mensajeAg');
 
         if(nombre in productos){
-            mensajeAg.textContent = `Producto ${nombre} ya existe`
-            return false;
+            alert(`El producto ${nombre} ya existe`);
+            return;
         }
         productos[nombre] = {cantidad, precio, categoria};
-        mensajeAg.textContent = `Producto ${nombre} agregado`
-        return true;
-
     }
 
     // elimino el producto e imprimo la tabla otra vez, para que se actualice
-    function eliminarProducto(nombre){
-        let mensajeElim = document.getElementById('mensajeElim');
-            
-        if(nombre in productos){
-            delete productos[nombre];
-            mensajeElim.textContent = 'Producto eliminado correctamente';
+    function eliminarProducto(nombre){        
+        if(!(nombre in productos)){
+            alert('El producto no existe');
             return;
         }
-        mensajeElim.textContent = 'No se ha podido eliminar el producto';
+        delete productos[nombre];
     }
 
     function buscarProducto(nombre) {
-        let mensajeBu = document.getElementById('mensajeBu');
-        if(nombre in productos){
-            let producto = productos[nombre];
-            mensajeBu.textContent = `Producto: ${nombre}, cantidad: ${producto.cantidad}, precio: ${producto.precio}, categoria: ${producto.categoria}`;
-        }else{
-            mensajeBu.textContent = `No se ha encontrado el producto ${nombre}`;
-        } 
+        if(!(nombre in productos)){
+            alert('El producto no existe');
+            return;
+        }
+        
+        return {nombre, ...productos[nombre]};
     }
 
     function actualizarInventario(nombre, cantidad){
-        let actualizando = document.getElementById('actualizando');
-
         if(!(nombre in productos)){
-            actualizando.textContent = `No se ha encotrado el producto ${nombre}`;
+            alert('El producto no existe');
             return;
         }
-        if(!(cantidad > 0)){
-            alert('La cantidad no puede ser 0 o menor');
+
+        const nuevoStock = productos[nombre].cantidad + cantidad;
+
+        if(nuevoStock < 0){
+            alert('No hay stock suficiente');
             return;
         }
-        productos[nombre].cantidad = cantidad;
-        actualizando.textContent = `Cantidad de ${nombre} actualizada a ${cantidad}`;
+
+        productos[nombre].cantidad = nuevoStock;
+
+        if (nuevoStock === 0) {
+            alert(`El stock de ${nombre} es 0`);
+        }
     }
 
-    // imprimir la tabla 
+    function filtrarProductoPorCategoria(categoria) {
+        return imprimirInventario().filter(p => p.categoria.toLowerCase() === categoria.toLowerCase())
+                .map(p => ({nombre: p.nombre, cantidad: p.cantidad, precio : p.precio, categoria : p.categoria}));
+    }
+
     function imprimirInventario(){
-        let filas = document.getElementById('filas');
-        let lista = [];
-        let html = '';
+        const lista = [];
 
-        for (let nombre in productos) {
-            let producto = productos[nombre];
+        for(let nombre in productos){
+            const p = productos[nombre];
 
-            if(categoriaActual === '' || producto.categoria.toLowerCase() === categoriaActual){
-                lista.push({nombre, ...producto});
-            }
+            lista.push({
+                nombre,
+                categoria : p.categoria,
+                cantidad : p.cantidad,
+                precio : p.precio,
+                total : p.cantidad * p.precio
+            });  
         }
+        return lista;
+    }
 
-        if(ordenActual === 'asc'){
-            lista.sort((a, b) => a.precio - b.precio);
-        }else if(ordenActual ==='desc'){
-            lista.sort((a,b) => b.precio - a.precio);
-        }
-
-        if(lista.length === 0){
-            filas.innerHTML = '<div class="fila"><div>Sin resultado</div></div>';
-            return;
-        }
-    
-        for (let p of lista) {
-            html += `
-            <div class="fila">
-                <div>${p.nombre}</div>
-                <div>${p.cantidad}</div>
-                <div>${p.precio}</div>
-                <div>${p.categoria}</div>
-            </div>
-            `;
-        }
-        filas.innerHTML = html;
+    function ordenarProductoPorPrecio(){
+        return imprimirInventario().sort((a, b) => a.precio - b.precio);
     }
 
     return {
-        agregarProducto(nombre, cantidad, precio, categoria)
-        eliminarProducto(nombre),
-        buscarProducto(nombre),
-        actualizarInventario(nombre, cantidad),
-        imprimirInventario()
+        agregarProducto,
+        eliminarProducto,
+        buscarProducto,
+        actualizarInventario,
+        ordenarProductoPorPrecio,
+        imprimirInventario,
+        filtrarProductoPorCategoria
     };
 
-});
+})();
 
 
+function pintarTabla(lista){
+    const zona = document.getElementById('resultados');
 
-
-// botones
-
-/*
-
-ordenarDesc.onclick = function(){
-    ordenActual = 'desc';
-    imprimirInventario();
-}
-
-ordenarAsc.onclick = function(){
-    ordenActual = 'asc';
-    imprimirInventario();
-}
-
-
-agregar.onclick = function(){
-    let nombre = document.getElementById('nombreA').value.trim().toLowerCase();
-    let cantidad = Number(document.getElementById('cantidad').value);
-    let precio = Number(document.getElementById('precio').value);
-    let categoria = document.getElementById('categoria').value.trim().toLowerCase();
-
-    if(nombre === '' || categoria === '' || !(cantidad > 0) || !(precio >= 0)){
-        alert('Revisa los campos: nombre, cantidad, precio');
+    if(lista.length === 0){
+        zona.innerHTML = '<p>Sin Resultado</p>';
         return;
     }
 
-    agregarProducto(nombre, cantidad, precio, categoria);
-    imprimirInventario();
+    let cabecera = '';
+    for (let campo in lista[0]) {
+        cabecera += `<th>${campo}</th>`;
+    }
+
+    const filas = lista.map(p =>{
+        let celdas = '';
+        
+        for (const campo in p) {
+            celdas += `<td>${p[campo]}</td>`;
+        }
+        return `<tr>${celdas}</tr>`;
+    }).join('');
+
+    zona.innerHTML = `<table><thead><tr>${cabecera}</tr></thead><tbody>${filas}</tbody></table>`;
 }
 
-eliminar.onclick = function(){
-    let nombre = document.getElementById('nombreE').value.trim().toLowerCase();
-    eliminarProducto(nombre);
-    imprimirInventario();
-}
+window.addEventListener('load', () => {
+    const valor = id => document.getElementById(id).value;
+    const refrescar = () => pintarTabla($negocio.imprimirInventario());
 
-buscar.onclick = function(){
-    let nombre = document.getElementById('nombreB').value.trim().toLowerCase();
-    buscarProducto(nombre);
-}
+    refrescar();
 
-actualizar.onclick = function(){
-    let nombre = document.getElementById('nombreAct').value.trim().toLowerCase();
-    let cantidad = Number(document.getElementById('cantidadAct').value);
+    document.getElementById('inventario').addEventListener('click', refrescar);
 
-    actualizarInventario(nombre, cantidad);
+    document.getElementById('ordenarAsc').addEventListener('click', () => {
+        pintarTabla($negocio.ordenarProductoPorPrecio());
+    });
 
-    imprimirInventario();
-}
+    document.getElementById('ordenarDesc').addEventListener('click', () => {
+        pintarTabla($negocio.ordenarProductoPorPrecio().reverse());
+    });
 
-aceptar.onclick = function(){
-    categoriaActual = document.getElementById('categoriaOrd').value.trim().toLowerCase();
-    imprimirInventario();
-}
-*/
+    document.getElementById('agregar').addEventListener('click', () => {
+        $negocio.agregarProducto(
+            valor('nombreA'),
+            Number(valor('cantidad')),
+            Number(valor('precio')),
+            valor('categoria')
+        );
+        refrescar();
+    });
+
+    document.getElementById('eliminar').addEventListener('click', () =>{
+        const nombre = valor('nombreE');
+
+        if(confirm(`Eliminar "${nombre}" ?`)){
+            $negocio.eliminarProducto(nombre);
+            refrescar();
+        }
+    });
+
+    document.getElementById('buscar').addEventListener('click', () => {
+        const p = $negocio.buscarProducto(valor('nombreB'));
+        pintarTabla(p ? [p] : []);
+    });
+
+    document.getElementById('actualizar').addEventListener('click', () => {
+        $negocio.actualizarInventario(valor('nombreAct').trim(), Number(valor('cantidadAct')));
+        refrescar();
+    });
+
+    document.getElementById('aceptar').addEventListener('click', () => {
+        pintarTabla($negocio.filtrarProductoPorCategoria(valor('categoriaOrd')));
+    });
+});

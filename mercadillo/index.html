@@ -5,82 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mercadillo</title>
     <link rel="stylesheet" href="./style.css" />
-    <script src="script.js" defer></script>
+    <script src="script2.js" defer></script>
 </head>
-<body>  
-    <div class="tabla">
-        <div class="fila cabecera">
-            <div >Nombre</div>
-            <div>Cantidad</div>
-            <div>Precio € </div>
-            <div>Categoria</div>
-        </div>
-        <div id="filas"></div>
-    </div>
-    <br><br>
+<body>
+    <!-- Zona común de resultados -->
+    <div id="resultados"></div>
+    <br>
+
     <form>
-        <input type="button" id="ordenarDesc" value="Des">
-        <input type="button" id="ordenarAsc" value="Asc">
-        <br>
-        <br>
+        <input type="button" id="inventario" value="Ver inventario">
+        <input type="button" id="ordenarAsc" value="Precio Asc">
+        <input type="button" id="ordenarDesc" value="Precio Desc">
 
-        <!--agregar-->
         <section class="seccion">
-            <label for="agregar">Agregar nuevo producto</label><br><br>
-
+            <h3>Agregar nuevo producto</h3>
             <label for="nombreA">Nombre</label><br>
             <input type="text" id="nombreA"><br>
-            <p id="mensajeAg"></p>
-
             <label for="cantidad">Cantidad</label><br>
             <input type="number" id="cantidad" min="0"><br>
-
             <label for="precio">Precio</label><br>
             <input type="number" id="precio" step="0.1" min="0"><br>
-
-            <label for="categoria">Categoria</label><br>
-            <input type="text" id="categoria"><br>
-            
-            <br><input type="button" id="agregar" value="Agregar">
+            <label for="categoria">Categoría</label><br>
+            <input type="text" id="categoria"><br><br>
+            <input type="button" id="agregar" value="Agregar">
         </section>
-        <br><br>
 
-        <!--eliminar-->
         <section class="seccion">
-            <label for="nombreE">Nombre de producto a eliminar</label><br><br>
+            <h3>Eliminar producto</h3>
+            <label for="nombreE">Nombre</label><br>
             <input type="text" id="nombreE"><br><br>
             <input type="button" id="eliminar" value="Eliminar">
-            <br>
-            <p id="mensajeElim"></p>
         </section>
-        <br><br>
 
-        <!--buscar-->
         <section class="seccion">
-            <label for="">Nombre de producto a buscar</label><br><br>
+            <h3>Buscar producto</h3>
+            <label for="nombreB">Nombre</label><br>
             <input type="text" id="nombreB"><br><br>
-            <p id="mensajeBu"></p><br>
-
             <input type="button" id="buscar" value="Buscar">
-            
         </section>
-        <br><br>
 
-        <!--actualizar-->
         <section class="seccion">
-            <label for="">Actualizar Producto</label><br>   
-            <label for="nombreAct">Nombre</label><br><br>
-            <input type="text" id="nombreAct"><br><br>
-            <label for="cantidadAct">Cantidad</label><br><br>
-            <input type="text" id="cantidadAct"><br><br>
-
-            <p id="actualizando"></p>
-
+            <h3>Actualizar inventario</h3>
+            <label for="nombreAct">Nombre</label><br>
+            <input type="text" id="nombreAct"><br>
+            <label for="cantidadAct">Cantidad (+ suma, − resta)</label><br>
+            <input type="number" id="cantidadAct"><br><br>
             <input type="button" id="actualizar" value="Actualizar">
         </section>
 
         <section class="seccion">
-            <label for="categoriaOrd">Escribe la categoria</label><br>
+            <h3>Filtrar por categoría</h3>
+            <label for="categoriaOrd">Categoría</label><br>
             <input type="text" id="categoriaOrd">
             <input type="button" id="aceptar" value="Aceptar">
         </section>
