@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <title>Simon Dice</title>
+</head>
+<body>
+    <head>
+        <h1>Simon Dice</h1><br>
+    </head>
+    
+    <div class="tabla">
+        <div class="fila">
+            <div class="colores verde"></div>
+            <div class="colores rojo"></div>
+        </div>
+        <div class="fila">
+            <div class="colores azul"></div>
+            <div class="colores amarillo"></div>
+        </div>
+    </div>
+    <br><br>
+    <section>
+        <label for="milisegundos">Milisegundos</label><br>
+        <input type="number" name="milisegundos" min="100" step="50"><br><br>
+        <button class="start">Start</button>
+    </section>
+    <br><br>
+    <section>
+        <label for="infoMejor">Mejor racha</label>
+        <p id="mejorRacha">0</p>
+        <label for="infoAct">Racha Actual</label>
+        <p id="rachaActual">0</p>
+    </section>
+</body>
+</html>

@@ -1,0 +1,34 @@
+
+.fila{
+
+    display: flex;
+    margin-top: 5px ;
+    gap: 5px;
+}
+
+.fila>div{
+    flex: 1px;
+    border: 1px solid #000;
+    padding: 5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 10px;
+}
+
+.verde{
+    background-color: green;
+    padding: 1px;
+}
+
+.rojo {
+    background-color: red;
+}
+
+.azul{
+    background-color: blue;
+}
+
+.amarillo{
+    background-color: yellow;
+}
