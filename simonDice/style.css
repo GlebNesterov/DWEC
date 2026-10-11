@@ -32,3 +32,8 @@
 .amarillo{
     background-color: yellow;
 }
+
+.activo {
+    opacity: 0.5;
+    filter: brightness(2);
+}
