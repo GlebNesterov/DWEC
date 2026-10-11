@@ -8,9 +8,9 @@
     <title>Simon Dice</title>
 </head>
 <body>
-    <head>
+    <header>
         <h1>Simon Dice</h1><br>
-    </head>
+    </header>
     <div class="tabla">
         <div class="fila">
             <div class="colores verde"></div>
@@ -21,17 +21,17 @@
             <div class="colores amarillo"></div>
         </div>
     </div>
-    <br><br>
-    <section>
+
+    <section id="controlls">
         <label for="milisegundos">Milisegundos</label><br>
-        <input type="number" name="milisegundos" min="100" step="50"><br><br>
+        <input type="number" name="milisegundos" id="milisegundos" min="100" step="50"><br><br>
         <button class="start">Start</button>
     </section>
-    <br><br>
-    <section>
-        <label for="infoMejor">Mejor racha</label>
+
+    <section id="game-information">
+        <p>Mejor racha</p>
         <p id="mejorRacha">0</p>
-        <label for="infoAct">Racha Actual</label>
+        <p>Racha Actual</p>
         <p id="rachaActual">0</p>
     </section>
 </body>

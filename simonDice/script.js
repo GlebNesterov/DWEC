@@ -2,8 +2,6 @@
 
 let ronda = 1;
 /*
-
-
 La lógica del juego se define en una función autoinvocada denominada
 “simon”. Que expone las siguientes características:
 o Un método para obtener el array con la secuencia de colores de la
@@ -19,7 +17,6 @@ iteración actual.
 
     const simon = (function (){
 
-
         // variables 
         let secuencia = [];
         const colores = ['verde', 'azul', 'amarillo', 'rojo'];
@@ -27,7 +24,6 @@ iteración actual.
         let posicionActual = 0;
         let mejorRacha = 0;
         let racha = 0;
-
 
         // simplemente secuencia de colores
         function secuenciaDeColores(){
@@ -55,7 +51,7 @@ iteración actual.
             estado = 'jugando';
             secuencia = [];
             posicionActual = 0;
-            racha = 1;
+            racha = 0;
             addColor();
 
         }
@@ -113,7 +109,6 @@ iteración actual.
     console.log("comprobacion6: ", simon.ultimoColorPulsado(3));
     console.log('comprobacion7: ', simon.estadoDeJuego());
 
-
     // prueba 2
     console.log('iniciar: ' , simon.iniciar());
     console.log('ultimo color: ', simon.ultimoColorPulsado(simon.secuenciaDeColores()[0]));
@@ -130,9 +125,6 @@ iteración actual.
     console.log('8 mejor racha: ', simon.obtenerMejorRacha());
 */
 
-
-
-
 const start = document.querySelector('.start');
 const milisegundos = document.querySelector('input[name=milisegundos]');
 
@@ -148,13 +140,13 @@ const botones = [
     document.querySelector('.rojo')
 ];
 
-function iluminarColor(num){
-    botones[num].classList.add('activo');
+// function iluminarColor(num){
+//     botones[num].classList.add('activo');
 
-    setTimeout(function (){
-        botones[num].classList.remove('activo');
-    }, Number(milisegundos.value) || 500);
-}
+//     setTimeout(function (){
+//         botones[num].classList.remove('activo');
+//     }, getFlashDuration());
+// }
 
 function apagarLuces(){
     botones.forEach(function (boton){
@@ -168,8 +160,8 @@ function presentarSecuencia() {
 
     function presentarColor(indice) {
         // console.log("indice", indice, "mostrando", mostrando);
-        const tiempo = Number(milisegundos.value) || 500;
-
+        const tiempo = getFlashDuration();
+        
         if (indice === secuencia.length) {
             apagarLuces();
             mostrando = false;
@@ -189,14 +181,42 @@ function presentarSecuencia() {
     presentarColor(0);
 }
 
+function getFlashDuration() {
+    const value = Number(milisegundos.value);
+    return Number.isFinite(value) && value >= 100 ? value : 500;
+}
+
+botones.forEach((button, colorIndex) => {
+    button.addEventListener('click', () => {
+        if (mostrando || simon.estadoDeJuego() !== "jugando") {
+            return;
+        }
+
+        const result = simon.ultimoColorPulsado(colorIndex);
+
+        mejorRacha.textContent = simon.obtenerMejorRacha();
+        racha.textContent = simon.obtenerRachaActual();
+        
+        if (result === 'fallo') {
+            alert('HAS PERDIDO, PULSA START PARA PROBAR OTRA VEZ');
+            return;
+        }
+
+        if (result === 'ronda completada') {
+            mostrando = true;
+
+            const flashDuration = getFlashDuration();
+            setTimeout(presentarSecuencia, flashDuration);
+        }
+    });
+});
+
 start.addEventListener('click', () =>{
     if (simon.estadoDeJuego() === 'jugando') {
         return;
     }
 
     simon.iniciar();
-
-    
 
     mejorRacha.textContent = simon.obtenerMejorRacha();
     racha.textContent = simon.obtenerRachaActual();
