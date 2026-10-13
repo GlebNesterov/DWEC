@@ -22,10 +22,31 @@
 */
 'use strict';
 
+let usuario = 0;
+let usuarioWin = 0;
+let maquina = 0;
+let maquinaWin = 0;
+
 function jugarDados(numeroLados) {
-    return function () {
-        Math.floor(Math.random() * numeroLados);
+    let num = 0;
+    
+    function aleatorio(){
+       return Math.floor(Math.random() * numeroLados + 1);
     }
+
+    return function () {
+        let tirada = [aleatorio(), aleatorio()];
+        return tirada;
+    };
 }
 
-console.log(jugarDados(4));
+let tirarDado = () =>{
+    // for con numero de tiradas
+    // 
+};
+
+let numeroLados = parseInt(prompt('Dime el numero de lados'));
+
+
+
+
