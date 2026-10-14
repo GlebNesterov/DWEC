@@ -1,16 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jugar Dados</title>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="#">
 </head>
 <body>
-    <div class="jugar">
-
-    </div>
+    <main>
+        <h1>Dados contra la máquina</h1>
+        <section id="configuracion">
+            <label>Lados del dado
+                <input type="number" id="lados" min="2" value="6">
+            </label>
+            <label>Número de tiradas
+                <input type="number" id="tiradas" min="1" value="5">
+            </label>
+            <button id="empezar">Empezar partida</button>
+        </section>
+        <section id="partida" hidden>
+            <p id="estado"></p>
+            <button id="tirar">Tirar dados</button>
+            <table>
+                <thead>
+                    <tr><th>Tirada</th><th>Usuario</th><th>Máquina</th><th>Resultado</th></tr>
+                </thead>
+                <tbody id="resultados"></tbody>
+                <tfoot>
+                    <tr><td>Puntos</td><td id="ptsUsuario">0</td><td id="ptsMaquina">0</td><td></td></tr>
+                    <tr><td>Victorias</td><td id="winUsuario">0</td><td id="winMaquina">0</td><td id="empates">Empates: 0</td></tr>
+                </tfoot>
+            </table>
+            <p id="final"></p>
+        </section>
+    </main>
 </body>
 </html>
