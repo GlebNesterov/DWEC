@@ -99,7 +99,6 @@ function estadisticaModulos(alumnos) {
     return aux2;
 }
 
-
 console.log(estadisticaModulos(alumnos));
 
 function JSONFormatter (){
