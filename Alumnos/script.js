@@ -36,21 +36,87 @@ Organiza el código adecuadamente.
 
 let alumnos = [
     {
-    nombre: 'marcos', nota: 4.5, modulos : 'DWEC', convocatorias: 1
+        nombre: 'marcos', nota: 4.5, modulo : 'DWEC', convocatorias: 1
     },
     {
-    nombre: 'ivan', nota: 6.4, modulos : 'DWES', convocatorias: 3
+        nombre: 'ivan', nota: 3.4, modulo : 'DWES', convocatorias: 3
     },
     {
-    nombre: 'daniel', nota: 10, modulos : 'DWES', convocatorias: 4
+        nombre: 'daniel', nota: 10, modulo : 'DWES', convocatorias: 4
     },
     {
-    nombe: 'louise', nota: 7.5, modulos : 'DWEC', convocatorias: 3
+        nombre: 'louise', nota: 7.5, modulo : 'DWEC', convocatorias: 3
     },
     {
-        nobre: 'jane', nota: 8.5, modulos : 'DIW', convocatorias: 1
+        nombre: 'jane', nota: 8.5, modulo : 'DWES', convocatorias: 1
     }
 ]
 
+function sacarSuspensos(alumnos) {
+    let suspensos = [];
+    for (let alumno of alumnos) {
+        if(alumno.nota < 5){
+            suspensos.push({
+                nombre: alumno.nombre,
+                nota : alumno.nota,
+                modulos: alumno.modulo
+            });
+        }
+    }
+    return suspensos.sort((a,b) => a.nombre - b.nombre);
+}
+
+console.log(sacarSuspensos(alumnos));
+
+function estadisticaModulos(alumnos) {
+    let aux = {};
+    let aux2 = [];
+
+    for (let alumno of alumnos) {
+
+        if(alumno.modulo in aux){
+            let modulo = aux[alumno.modulo];
+            modulo.total++;
+            modulo.notaAgr += alumno.nota;
+            modulo.nota += alumno.convocatorias;
+        }else{
+            aux[alumno.modulo] = {
+                total:1,
+                notaAgr: alumno.nota,
+                convocatorias: alumno.convocatorias
+            }
+        }
+        
+    }
+
+    for (const au in aux) {
+        aux2.push({
+            modulo: au,
+            media: aux[au].media = aux[au].notaAgr / aux[au].total,
+            mediaConvocatorias: aux[au].mediaConvocatorias = aux[au].convocatorias / aux[au].convocatorias
+        });
+    }
+    return aux2;
+}
 
 
+console.log(estadisticaModulos(alumnos));
+
+function JSONFormatter (){
+    return JSON.stringify(alumnos);
+}
+
+
+function JSONCadena(cadena) {
+    try{
+        let datos = JSON.parse(cadena);
+        if(!Array.isArray(datos)){
+            console.log('No es un array');
+            return; 
+        }
+        return datos;
+    }catch(error){
+        console.log('error de formato');
+        return;
+    }
+}
