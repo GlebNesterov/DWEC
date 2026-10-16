@@ -23,6 +23,8 @@ Campos:
 
 'use strict';
 
+const $ = (id) => document.getElementById(id);
+
 class Factura {
     constructor(clienteNIF, fecha, hora, pagada, lineas){
         this.clienteNIF = clienteNIF;
@@ -33,22 +35,81 @@ class Factura {
     }
 
     get importeTotal(){
-        return 
+        let total = 0;
+        for (let i = 0; i < this.lineas.length; i++) {
+            total += this.lineas[i].cantidad * this.lineas[i].precio;
+        }
+
+        return total;
     }
 
     get numeroArticulo(){
-        return 
+        return this.lineas.length;
     }
 
     imprimirFactura(){
-        return 
+        let texto = 'FACTURA \n';
+        texto += '-------------------------\n';
+        texto += 'NIF de cliente: ' + this.clienteNIF + '\n';
+        texto += 'Fecha: ' + this.fecha + '\n';
+        texto += 'Hora: ' + this.hora + '\n';
+        texto += 'Pagada: ' + this.pagada + '\n';
+        texto += '-------------------------\n';
+        texto += "LÍNEAS DE FACTURA:\n";
+
+        for (let i = 0; i < this.lineas.length; i++) {
+            texto += "Concepto: " + this.lineas[i].concepto + "\n";
+            texto += "Cantidad: " + this.lineas[i].cantidad + "\n";
+            texto += "Precio: " + this.lineas[i].precio + " €\n";
+            texto += "Subtotal: " +
+                (this.lineas[i].cantidad * this.lineas[i].precio) +
+                " €\n";
+            texto += "------------------------\n";
+        }
+
+        texto += "Número de líneas: " + this.numeroArticulos + "\n";
+        texto += "Importe total: " + this.importeTotal + " €\n";
+
+        return texto;
+    }
+
+    agregarLinea(){
+        return this.lineas.push({
+            concepto: this.lineas.concepto,
+            cantidad: this.lineas.cantidad,
+            precio: this.lineas.preio
+        });
     }
 
     eliminarLinea(){
+        return this.lineas.pop({
+            concepto: this.lineas.concepto,
+            cantidad: this.lineas.cantidad,
+            precio: this.lineas.precio
+        });
+    }
+}
+
+class Utilidades{
+    constructor(){
 
     }
 }
 
-class LineaFactura extends Factura{
-    
+function crearFactura(){
+    let clienteNIF = $('nif');
+    let fecha = $('fecha');
+    let hora = $('hora');
+    let pagada = $('pagada');
+    let concepto = $('concepto');
+    let cantidad = $('cantidad');
+    let precio = $('precio');
+
+    let lineas = [
+        {
+            concepto: concepto,
+            cantidad: cantidad,
+            precio: precio
+        }
+    ];
 }

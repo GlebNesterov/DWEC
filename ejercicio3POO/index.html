@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio 3</title>
+    <link rel="stylesheet" href="style.css">
     <script src=""></script>
 </head>
 <body>
@@ -28,6 +29,7 @@
         </form>
     </section>
     <br>
+    <h3>Datos producto</h3>
     <section class="dtosCompra">
         <form action="" method="post">
             <label for="concepto">Concepto</label><br>
@@ -37,7 +39,7 @@
             <input type="number" name="cantidad" id="cantidad" min="1">
             <br>
             <label for="precio">Precio $</label><br>
-            <input type="number" name="precio" id="precio">
+            <input type="text" name="precio" id="precio">
             <br>
             <br>
             <button id="agregarLinea">Agregar</button>
@@ -56,6 +58,11 @@
             <button type="button" id="deserializar">Deserializar</button>
             <button type="button" id="serializar">Serializar</button>
         </form>
+    </section>
+    <br>
+    <section class="impresion">
+        <h2>Impresión</h2>
+        <pre id="impresionFactura"></pre>
     </section>
 
     </form>
