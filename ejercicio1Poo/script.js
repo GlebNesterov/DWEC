@@ -10,12 +10,6 @@ Se pide:
 
 'use strict'
 
-const persona = {
-    nombre: 'Jhon',
-    nacimiento: '19-06-2006',
-    hobbies: ['cantar', 'bailar', 'caminar']
-};
-
 function calcularEdad(nacimiento) {
     const hoy = new Date();
     let edad = hoy.getFullYear() - nacimiento.getFullYear();
@@ -25,7 +19,7 @@ function calcularEdad(nacimiento) {
     }
     return edad;
 }
-// persona literal
+// persona literal 
 const personaLiteral = {
     nombre: 'Jhon',
     nacimiento: new Date(2006, 5, 19),
