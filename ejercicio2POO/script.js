@@ -23,11 +23,11 @@ Animal.prototype.hacerRuido = function () {
     }
 };
 
-const animal1 = new Animal('perro', 'Max');
+const animal1 = new AnimalPrincipal('perro', 'Max');
 
-const animal2 = new Animal('gato', 'Ryan');
+const animal2 = new AnimalPrincipal('gato', 'Ryan');
 
-const animal3 = new Animal('animal', 'Skr');
+const animal3 = new AnimalPrincipal('animal', 'Skr');
 
 
 console.log('Perro: ');
@@ -44,10 +44,3 @@ console.log('Animal: ');
 console.log(animal3.comer());
 console.log(animal3.dormir());
 console.log(animal3.hacerRuido());
-
-
-class Animal extends AnimalPrincipal{
-    constructor(tipo, nombre){
-        super(tipo, nombre);
-    }
-}

@@ -45,12 +45,13 @@ function PersonaFn(nombre, nacimiento, hobbies) {
     this.hobbies = hobbies;
 }
 
-// no lo hay en la documentacion )))
+/*
 Object.defineProperty(PersonaFn.prototype, 'edad', {
     get(){
         return calcularEdad(this.nacimiento);
     }
 });
+*/
 
 // Método en el prototipo (compartido por todas las instancias)
 PersonaFn.prototype.saludar = function () {
