@@ -7,6 +7,57 @@
     <script src=""></script>
 </head>
 <body>
-    
+    <h1>Factura</h1>
+    <h3>Datos del cliente</h3>
+    <section class="dtosCliente">
+        <form action=""method="post">
+            <label for="nif">NIF: </label><br>
+            <input type="text" pattern="[A-Za-z]{1}[0-9]{8}" id="nif">
+            <br>
+            <label for="fecha">Fecha: </label><br>
+            <input type="date" name="fecha" id="fecha">
+            <br>
+            <label for="hora">Hora: </label><br>
+            <input type="time" name="hora" id="hora">
+            <br>
+            <label for="pagada">Pagada</label>
+            <input type="checkbox" name="pagada" id="pagada">
+            <br>
+            <br>
+            <button id="actualizar">Actualizar</button>
+        </form>
+    </section>
+    <br>
+    <section class="dtosCompra">
+        <form action="" method="post">
+            <label for="concepto">Concepto</label><br>
+            <textarea type="text" name="concepto" id="concepto"></textarea>
+            <br>
+            <label for="cantidad">Cantidad</label><br>
+            <input type="number" name="cantidad" id="cantidad" min="1">
+            <br>
+            <label for="precio">Precio $</label><br>
+            <input type="number" name="precio" id="precio">
+            <br>
+            <br>
+            <button id="agregarLinea">Agregar</button>
+            <button id="EliminarLinea">Eliminar</button>
+        </form>
+    </section>
+    <br>
+    <section class="serializacion">
+        <form action="" method="post">
+            <label for="entrada">Entrada (JSON):</label><br>
+            <textarea id="entrada" name="entrada" rows="8" cols="50"></textarea>
+            <br>
+            <label for="salida">Salida (JSON):</label><br>
+            <textarea id="salida" name="salida" rows="8" cols="50" readonly></textarea>
+            <br>
+            <button type="button" id="deserializar">Deserializar</button>
+            <button type="button" id="serializar">Serializar</button>
+        </form>
+    </section>
+
+    </form>
 </body>
 </html>
