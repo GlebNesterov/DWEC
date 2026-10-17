@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio 3</title>
     <link rel="stylesheet" href="style.css">
-    <script src=""></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <h1>Factura</h1>
@@ -25,7 +25,7 @@
             <input type="checkbox" name="pagada" id="pagada">
             <br>
             <br>
-            <button id="actualizar">Actualizar</button>
+            <button type="button" id="actualizar">Actualizar</button>
         </form>
     </section>
     <br>
@@ -39,11 +39,11 @@
             <input type="number" name="cantidad" id="cantidad" min="1">
             <br>
             <label for="precio">Precio $</label><br>
-            <input type="text" name="precio" id="precio">
+            <input type="number" name="precio" id="precio" min="0" step="0.01">
             <br>
             <br>
-            <button id="agregarLinea">Agregar</button>
-            <button id="EliminarLinea">Eliminar</button>
+            <button type="button" id="agregarLinea">Agregar</button>
+            <button type="button" id="EliminarLinea">Eliminar</button>
         </form>
     </section>
     <br>
