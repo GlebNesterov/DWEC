@@ -1,5 +1,5 @@
-import Juguete from "./juguete";
-import datos from "./datos";
+import {Juguete} from "./juguete";
+import {datosJuguetes} from "./datos";
 
 
 class Jugueteria{
@@ -7,39 +7,182 @@ class Jugueteria{
     //juguetes: privado. Lista de juguetes (clase Juguete).
     //contador: privado. Almacena el jugueteId máximo
     #contenedor;
-    #juguetes;
-    #contador;
+    #juguetes = [];
+    #contador = 0;
 
     //constructor(): Carga los datos de prueba, inicializa la lista juguetes y el contador.
     constructor(){
-
-        this.#contador = 0;
-        this.#juguetes = [];
+        this.#juguetes = datosJuguetes.map(d => new Juguete(d.jugueteId, d.nombre, d.marca, d.precio));
+        this.#contador = Math.max(0, ...this.#juguetes.map(j => j.jugueteId));
     }
 
     iniciarApp(selector){
-        if(document.querySelector(selector)){
-            return 
-        }else{
-
+        this.#contenedor = document.querySelector(selector);
+        if(!this.#contenedor){
+            alert('Error al iniciar el formulario');
+            return;
         }
+        this.#navegarInicio();
     }
 
     obtenerJuguetes(filtro){
-        
+        if(!filtro){
+            return this.#juguetes;
+        }else{
+            return this.#juguetes.filter(j => j.nombre.toLowerCase().includes(filtro.toLowerCase()));
+        }
     }
 
     obtenerJuguete(id){
-
+        return this.#juguetes.find(j => j.jugueteId === Number(id));
     }
 
-    crearJuguete(){
-        ++this.#contador;
-
-        let jug = new Juguete();
+    crearJuguete(nuevo){
+        let jug = new Juguete(++this.#contador, nuevo.nombre, nuevo.marca, nuevo.precio);
+        this.#juguetes.push(jug);
     }
 
     borrarJuguete(id){
+        this.#juguetes = this.#juguetes.filter(j => j.jugueteId !== Number(id));
+    }
 
+    #navegarInicio(){
+        this.#contenedor.innerHTML = this.generarHTMLNavegacion() + this.generarHTMLBuscador() + this.generarHTMLListado(this.obtenerJuguete());
+        this.#asignarEventos();
+    }
+
+    #navegarListadoJuguetes(){
+        this.#contenedor.innerHTML = this.generarHTMLNavegacion() + this.generarHTMLListado(this.obtenerJuguete());
+        this.#asignarEventos();
+    }
+
+    #navegarPropiedades(juguete){
+        this.#contenedor.innerHTML = this.generarHTMLNavegacion();
+        juguete.generarHTMLPropiedades();
+        this.#asignarEventos();
+    }
+
+    #eventosNavegacion(){
+        const nav = this.#contenedor.querySelector('[data-componente="navegacion"]');
+        nav.addEventListener('click', (e) =>{
+            e.preventDefault();
+            if(e.target.dataset.destino === 'inicio'){
+                this.#navegarInicio();
+            }else if(e.target.dataset.destino === 'listadojuguetes'){
+                this.#navegarListadoJuguetes();
+            }
+        });
+    }
+
+    #eventosBuscador(){
+        const form = this.#contenedor.querySelector('[data-componente="buscador"]');
+        form?.addEventListener('submit', (e) =>{
+            e.preventDefault();
+            const inp = this.#contenedor.querySelector('#jg-buscador-filtro');
+            const filtro = inp.value;
+            const lista = this.obtenerJuguetes(filtro);
+            
+            const listado = this.#contenedor.querySelector('[data-componente="listado"]');
+            listado.outerHTML = this.generarHTMLListado(lista);
+            this.#eventosListado();
+        });
+    }
+
+    #eventosListado(){
+        const div = this.#contenedor.querySelector('[data-componente="listado"]');
+        div?.addEventListener('click', (e) =>{
+            const boton = e.target.closest("button");
+            if(boton === null){
+                return;
+            }
+            const accion = boton.dataset.accion;
+            const id = boton.dataset.id;
+            
+            if(accion === 'ver'){
+                const j = this.obtenerJuguete(id);
+                if(!j){
+                    alert('El id no existe');
+                }else{
+                    this.#navegarPropiedades(j);
+                }
+            }else if(accion === 'borrar'){
+                this.borrarJuguete(id);
+                this.#navegarInicio();
+            }else if (accion === 'nuevo'){
+                this.#navegarPropiedades(new Juguete());
+            }
+        });
+    }
+
+    #eventosPropiedades(){
+        const form = this.#contenedor.querySelector('[data-componente="propiedades"]');
+        form?.addEventListener('submit', (e) =>{
+            e.preventDefault();
+            const datos = new FormData(e.target);
+            const id = Number(datos.get('jugueteid'));
+            const nombre = datos.get('nombre');
+            const marca = datos.get('marca');
+            const precio = Number(datos.get('precio'));
+
+            if(id === 0){
+                this.crearJuguete(new Juguete(0, nombre, marca, precio));
+            }else {
+                let j = this.obtenerJuguete(id);
+                j.nombre = nombre;
+                j.marca = marca;
+                j.precio = precio;
+            }
+            this.#navegarListadoJuguetes();
+        });
+    }
+
+    #asignarEventos(){
+        this.#eventosBuscador();
+        this.#eventosNavegacion();
+        this.#eventosPropiedades()
+        this.#eventosListado();
+    }
+
+    generarHTMLNavegacion() {
+    return `<nav data-componente="navegacion" class="jg-navegacion">
+                <ul>
+                    <li><a href="#" data-destino="inicio">Inicio</a></li>
+                    <li><a href="#" data-destino="listadojuguetes">Listado</a></li>
+                </ul>
+            </nav>`;
+    }
+
+    generarHTMLBuscador(){
+        return `
+            <form data-componente="buscador" name="jg-buscador">
+                <input type="text" id="jg-buscador-filtro" placeholder="Buscar por nombre..." />
+                <button type="submit">Buscar</button>
+            </form>`;
+    }
+
+    generarHTMLListado(listaJuguetes) {
+        const filas = listaJuguetes.map(j => `
+            <div class="jg-tabla-fila">
+                    <div>${j.nombre}</div>
+                    <div>${j.marca}</div>
+                    <div>${j.precio}</div>
+                    <div>
+                        <button data-accion="ver" data-id="${j.jugueteId}">Ver</button>
+                        <button data-accion="borrar" data-id="${j.jugueteId}">Borrar</button>
+                    </div>
+            </div>`).join("");
+
+        return `
+            <div data-componente="listado" class="jg-tabla">
+                <div class="jg-tabla-fila jg-cabecera">
+                    <div>Nombre</div><div>Marca</div><div>Precio</div><div>Acciones</div>
+                </div>
+                ${filas}
+                <button data-accion="nuevo">Nuevo juguete</button>
+            </div>
+            `;
     }
 }
+
+const app = new Jugueteria();
+app.iniciarApp('#app');

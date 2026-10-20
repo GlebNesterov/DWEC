@@ -1,4 +1,6 @@
 class Juguete{
+    
+
     constructor(jugueteId = 0, nombre, marca, precio){
         this.#jugueteId = jugueteId;
         this.nombre = nombre;
