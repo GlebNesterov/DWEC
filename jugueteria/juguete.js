@@ -74,3 +74,4 @@ class Juguete{
                 </form>`;
     }
 }
+export default Juguete;
