@@ -1,0 +1,31 @@
+.jg-navegacion{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+        li {
+            display: inline-block;
+            a {
+                text-decoration: none;
+            /* color: inherit; */
+            }
+        }
+}
+
+.jg-tabla-fila {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+        div {
+            flex: 1;
+            outline: 1px solid black;
+            padding: .5em;
+        }
+}
+
+.jg-tabla-fila.jg-cabecera {
+    background-color: azure;
+    text-align: center;
+    font-weight: bolder;
+    color: green;
+}

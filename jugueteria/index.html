@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugeteria</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="jugueteria.js" defer></script>
+</head>
+<body>
+    <div id="app">
+    <!-- Navegación -->
+    <nav data-componente="navegacion" class="jg-navegacion">
+        <ul>
+            <li><a href="#" data-destino="inicio">Inicio</a></li>
+            <li><a href="#" data-destino="listadojuguetes">Listado</a></li>
+        </ul>
+    </nav>
+    <!-- Buscador -->
+    <form data-componente="buscador" name="jg-buscador">
+        <input type="text" id="jg-buscador-filtro" placeholder="Buscar
+        por nombre..." />
+        <button type="submit">Buscar</button>
+    </form>
+    <!-- Listado de Juguetes -->
+    <div data-componente="listado" class="jg-tabla">
+    <div class="jg-tabla-fila jg-cabecera">
+    <div>Nombre</div><div>Marca</div><div>Precio</div>
+    </div>
+    <!-- Filas de juguetes -->
+    </div>
+    <!-- Formulario de Propiedades -->
+        
+    </div>
+</body>
+</html>
