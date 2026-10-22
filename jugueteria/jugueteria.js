@@ -1,5 +1,5 @@
-import {Juguete} from "./juguete";
-import {datosJuguetes} from "./datos";
+import Juguete from "./juguete.js";
+import datosJuguetes from "./datos.js";
 
 
 class Jugueteria{
@@ -13,9 +13,11 @@ class Jugueteria{
     //constructor(): Carga los datos de prueba, inicializa la lista juguetes y el contador.
     constructor(){
         this.#juguetes = datosJuguetes.map(d => new Juguete(d.jugueteId, d.nombre, d.marca, d.precio));
+        //console.log(this.#juguetes);
         this.#contador = Math.max(0, ...this.#juguetes.map(j => j.jugueteId));
+        //console.log(this.#contador);
     }
-
+    
     iniciarApp(selector){
         this.#contenedor = document.querySelector(selector);
         if(!this.#contenedor){
@@ -25,9 +27,18 @@ class Jugueteria{
         this.#navegarInicio();
     }
 
+    /*
+    iniciarApp(selector){
+        this.#contenedor = document.querySelector(selector);
+        console.log(this.#contenedor);
+        alert('!!!')
+    }
+    */
+    
+
     obtenerJuguetes(filtro){
         if(!filtro){
-            return this.#juguetes;
+            return [...this.#juguetes];
         }else{
             return this.#juguetes.filter(j => j.nombre.toLowerCase().includes(filtro.toLowerCase()));
         }
@@ -144,12 +155,12 @@ class Jugueteria{
     }
 
     generarHTMLNavegacion() {
-    return `<nav data-componente="navegacion" class="jg-navegacion">
-                <ul>
-                    <li><a href="#" data-destino="inicio">Inicio</a></li>
-                    <li><a href="#" data-destino="listadojuguetes">Listado</a></li>
-                </ul>
-            </nav>`;
+        return `<nav data-componente="navegacion" class="jg-navegacion">
+                    <ul>
+                        <li><a href="#" data-destino="inicio">Inicio</a></li>
+                        <li><a href="#" data-destino="listadojuguetes">Listado</a></li>
+                    </ul>
+                </nav>`;
     }
 
     generarHTMLBuscador(){
@@ -185,4 +196,9 @@ class Jugueteria{
 }
 
 const app = new Jugueteria();
-app.iniciarApp('#app');
+
+console.log(app.obtenerJuguete('Set de construcción Lego City'));
+
+
+//app.generarHTMLBuscador();
+//app.iniciarApp('#app');

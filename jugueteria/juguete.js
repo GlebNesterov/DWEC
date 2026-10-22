@@ -1,15 +1,22 @@
 class Juguete{
-    
+    #_jugueteId;
+    #nombre
+    #marca
+    #precio
 
-    constructor(jugueteId = 0, nombre, marca, precio){
-        this.#jugueteId = jugueteId;
-        this.nombre = nombre;
-        this.marca = marca;
-        this.precio = precio;
+    constructor(jugueteId = 0, nombre = '', marca = '', precio = 0){
+        this.#_jugueteId = jugueteId;
+        this.#nombre = nombre;
+        this.#marca = marca;
+        this.#precio = precio;
     }
 
-    get #jugueteId(){
-        return this.#jugueteId;
+    get jugueteId(){
+        return this.#_jugueteId;
+    }
+
+    set #jugueteId(id){
+        this.#_jugueteId = id;
     }
 
     get nombre(){
@@ -26,7 +33,7 @@ class Juguete{
 
     set nombre(nombre){
         if(nombre !== null){
-            this.nombre = nombre;
+            this.#nombre = nombre;
         }else{
             console.log('nombre invalido');
             return;
@@ -34,8 +41,8 @@ class Juguete{
     }
 
     set marca(marca){
-        if(this.marca !== marca){
-            this.marca = marca;
+        if(marca !== marca){
+            this.#marca = marca;
         }else{
             console.log('marca invalida');
             return;
@@ -44,7 +51,7 @@ class Juguete{
 
     set precio(precio){
         if(precio !== null){
-            this.precio = precio;
+            this.#precio = precio;
         }else{
             console.log('precio invalido');
             return;
@@ -54,7 +61,7 @@ class Juguete{
     generarHTMLPropiedades(){
         return `<form data-componente="propiedades" name="jg-formulario">
                         <input type="hidden" id="jugueteid" name="jugueteid"
-                        value="${this.#jugueteId}">
+                        value="${this.#_jugueteId}">
                     <div>
                         <label for="nombre">Nombre del juguete:</label>
                         <input type="text" id="nombre" name="nombre"
