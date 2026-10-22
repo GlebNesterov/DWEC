@@ -15,7 +15,7 @@ class Jugueteria{
         this.#juguetes = datosJuguetes.map(d => new Juguete(d.jugueteId, d.nombre, d.marca, d.precio));
         //console.log(this.#juguetes);
         this.#contador = Math.max(0, ...this.#juguetes.map(j => j.jugueteId));
-        //console.log(this.#contador);
+        //  console.log(this.#contador);
     }
     
     iniciarApp(selector){
@@ -42,7 +42,7 @@ class Jugueteria{
         }else{
             return this.#juguetes.filter(j => j.nombre.toLowerCase().includes(filtro.toLowerCase()));
         }
-    }
+    } 
 
     obtenerJuguete(id){
         return this.#juguetes.find(j => j.jugueteId === Number(id));
@@ -50,7 +50,11 @@ class Jugueteria{
 
     crearJuguete(nuevo){
         let jug = new Juguete(++this.#contador, nuevo.nombre, nuevo.marca, nuevo.precio);
-        this.#juguetes.push(jug);
+        if(this.#juguetes.push(jug)){
+            return 1;
+        }else{
+            retun -1;
+        }
     }
 
     borrarJuguete(id){
@@ -172,6 +176,7 @@ class Jugueteria{
     }
 
     generarHTMLListado(listaJuguetes) {
+        listaJuguetes = this.#juguetes;
         const filas = listaJuguetes.map(j => `
             <div class="jg-tabla-fila">
                     <div>${j.nombre}</div>
@@ -197,8 +202,28 @@ class Jugueteria{
 
 const app = new Jugueteria();
 
-console.log(app.obtenerJuguete('Set de construcción Lego City'));
 
+// funciona 
+//console.log(app.obtenerJuguetes('Set'));
+
+// funciona 
+//console.log(app.obtenerJuguete(2));
+
+/*
+    // funciona
+    console.log(app.obtenerJuguetes());
+
+    let nuevo = new Juguete('Robot', 'transformer', '13.9');
+    console.log(app.crearJuguete(nuevo));
+    console.log(app.obtenerJuguetes());
+*/
+
+/*
+    // funciona
+    console.log(app.obtenerJuguetes());
+    app.borrarJuguete(2)
+    console.log(app.obtenerJuguetes());
+*/
 
 //app.generarHTMLBuscador();
-//app.iniciarApp('#app');
+app.iniciarApp('#app');

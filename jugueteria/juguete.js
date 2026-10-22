@@ -20,15 +20,15 @@ class Juguete{
     }
 
     get nombre(){
-        return this.nombre;
+        return this.#nombre;
     }
 
     get marca(){
-        return this.marca;
+        return this.#marca;
     }
 
     get precio(){
-        return this.precio;
+        return this.#precio;
     }
 
     set nombre(nombre){
