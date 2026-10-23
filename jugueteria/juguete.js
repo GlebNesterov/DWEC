@@ -59,7 +59,7 @@ class Juguete{
     }
 
     generarHTMLPropiedades(){
-        return `<form data-componente="propiedades" name="jg-formulario">
+            return `<form data-componente="propiedades" name="jg-formulario">
                         <input type="hidden" id="jugueteid" name="jugueteid"
                         value="${this.#_jugueteId}">
                     <div>

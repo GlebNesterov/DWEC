@@ -91,25 +91,29 @@ class Jugueteria{
 
     #eventosBuscador(){
         const form = this.#contenedor.querySelector('[data-componente="buscador"]');
-        form?.addEventListener('submit', (e) =>{
+        const filtro = this.#contenedor.querySelector('#jg-buscador-filtro');
+        form.addEventListener('submit', (e) =>{
             e.preventDefault();
-            const inp = this.#contenedor.querySelector('#jg-buscador-filtro');
-            const filtro = inp.value;
-            const lista = this.obtenerJuguetes(filtro);
+           
+            let texto = filtro.value;
+            const lista = this.obtenerJuguetes(texto);
             
-            const listado = this.#contenedor.querySelector('[data-componente="listado"]');
-            listado.outerHTML = this.generarHTMLListado(lista);
+            // const listado = this.#contenedor.querySelector('[data-componente="listado"]');
+            this.generarHTMLBuscador();
+            this.generarHTMLListado(lista);
             this.#eventosListado();
         });
     }
 
+    /*
     #eventosListado(){
         const div = this.#contenedor.querySelector('[data-componente="listado"]');
-        div?.addEventListener('click', (e) =>{
-            const boton = e.target.closest("button");
-            if(boton === null){
+        div.addEventListener('click', (e) =>{
+            const botones = this.#contenedor.querySelectorAll('[data-accion]')
+            if(botones === null){
                 return;
             }
+
             const accion = boton.dataset.accion;
             const id = boton.dataset.id;
             
@@ -128,11 +132,46 @@ class Jugueteria{
             }
         });
     }
+    */
 
-    #eventosPropiedades(){
+    #eventosListado(){
+        const botones = this.#contenedor.querySelectorAll('[data-accion]');
+        botones.forEach(x => {
+                let accion = x.dataset['accion'];
+                let dataId = x.closest('[id]');
+
+                switch(accion){
+                    case 'ver':{
+                        x.parentNode.addEventListener('click', (dataId) =>{
+                            const j = this.obtenerJuguete(dataId);
+                            if(!j){
+                                alert('El id no existe');
+                            }else{
+                                this.#navegarPropiedades(j);
+                            }
+                        });
+                    }
+                    case 'borrar': {
+                        x.parentNode.addEventListener('click', (dataId)=>{
+                            this.borrarJuguete(id);
+                            this.#navegarInicio();
+                        });
+                    }
+                    case 'nuevo': {
+                        x.parentNode.addEventListener('click', (dataId)=>{
+                            this.#navegarPropiedades(new Juguete());
+                        });
+                    }
+                }
+            });
+    }
+
+    #eventosPropiedades(juguete){
         const form = this.#contenedor.querySelector('[data-componente="propiedades"]');
-        form?.addEventListener('submit', (e) =>{
+        form.addEventListener('submit', (e) =>{
             e.preventDefault();
+
+
             const datos = new FormData(e.target);
             const id = Number(datos.get('jugueteid'));
             const nombre = datos.get('nombre');
@@ -140,21 +179,22 @@ class Jugueteria{
             const precio = Number(datos.get('precio'));
 
             if(id === 0){
-                this.crearJuguete(new Juguete(0, nombre, marca, precio));
+                juguete = new Juguete(0, nombre, marca, precio);
+                this.crearJuguete(juguete);
             }else {
                 let j = this.obtenerJuguete(id);
                 j.nombre = nombre;
                 j.marca = marca;
                 j.precio = precio;
             }
-            this.#navegarListadoJuguetes();
+            this.#navegarInicio();
         });
     }
 
     #asignarEventos(){
         this.#eventosBuscador();
         this.#eventosNavegacion();
-        this.#eventosPropiedades()
+        this.#eventosPropiedades();
         this.#eventosListado();
     }
 
@@ -225,5 +265,10 @@ const app = new Jugueteria();
     console.log(app.obtenerJuguetes());
 */
 
-//app.generarHTMLBuscador();
+
+// no funciona
+// buscar 
+// nuevo juguete
+// ver
+
 app.iniciarApp('#app');
