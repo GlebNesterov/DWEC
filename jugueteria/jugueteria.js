@@ -72,8 +72,8 @@ class Jugueteria{
     }
 
     #navegarPropiedades(juguete){
-        this.#contenedor.innerHTML = this.generarHTMLNavegacion();
-        juguete.generarHTMLPropiedades();
+        this.#contenedor.innerHTML = this.generarHTMLNavegacion() + juguete.generarHTMLPropiedades();
+        //console.log(juguete.generarHTMLPropiedades());
         this.#asignarEventos();
     }
 
@@ -107,25 +107,26 @@ class Jugueteria{
 
     #eventosListado(){
         const div = this.#contenedor.querySelector('[data-componente="listado"]');
-        div.addEventListener('click', (e) =>{
+        div?.addEventListener('click', (e) =>{
             e.preventDefault();
 
-            console.log();
-            
-            const botones = this.#contenedor.querySelectorAll('[data-accion]');
-            if(botones === null){
+            const boton = e.target.closest('button');
+
+            if(boton === null){
                 return;
             }
-            const boton = e.closest('button');
-            
 
             const accion = boton.dataset.accion;
             const id = boton.dataset.id;
 
             switch(accion){
                 case 'ver':{
-                    const j = this.obtenerJuguete(id);
-                    this.#navegarPropiedades(j);
+                    if(id !== null){
+                        const j = this.obtenerJuguete(id);
+                        this.#navegarPropiedades(j);
+                    }else{
+                        alert('EL id no existe');
+                    }
                     break;
                 }                    
                 case 'borrar':{
@@ -142,6 +143,8 @@ class Jugueteria{
                     break;
                 }
             }   
+            //console.log(id);
+            //console.log(accion);
         });
     }
 
@@ -282,6 +285,5 @@ const app = new Jugueteria();
 // no funciona
 // nuevo juguete
 // ver
-// boton de borrar
 
 app.iniciarApp('#app');
