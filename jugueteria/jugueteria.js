@@ -62,12 +62,12 @@ class Jugueteria{
     }
 
     #navegarInicio(){
-        this.#contenedor.innerHTML = this.generarHTMLNavegacion() + this.generarHTMLBuscador() + this.generarHTMLListado(this.obtenerJuguete());
+        this.#contenedor.innerHTML = this.generarHTMLNavegacion() + this.generarHTMLBuscador() + this.generarHTMLListado(this.obtenerJuguetes());
         this.#asignarEventos();
     }
 
     #navegarListadoJuguetes(){
-        this.#contenedor.innerHTML = this.generarHTMLNavegacion() + this.generarHTMLListado(this.obtenerJuguete());
+        this.#contenedor.innerHTML = this.generarHTMLNavegacion() + this.generarHTMLListado(this.obtenerJuguetes());
         this.#asignarEventos();
     }
 
@@ -79,7 +79,7 @@ class Jugueteria{
 
     #eventosNavegacion(){
         const nav = this.#contenedor.querySelector('[data-componente="navegacion"]');
-        nav.addEventListener('click', (e) =>{
+        nav?.addEventListener('click', (e) =>{
             e.preventDefault();
             if(e.target.dataset.destino === 'inicio'){
                 this.#navegarInicio();
@@ -92,15 +92,15 @@ class Jugueteria{
     #eventosBuscador(){
         const form = this.#contenedor.querySelector('[data-componente="buscador"]');
         const filtro = this.#contenedor.querySelector('#jg-buscador-filtro');
-        form.addEventListener('submit', (e) =>{
+        form?.addEventListener('submit', (e) =>{
             e.preventDefault();
-           
+        
             let texto = filtro.value;
             const lista = this.obtenerJuguetes(texto);
             
-            // const listado = this.#contenedor.querySelector('[data-componente="listado"]');
+            const listado = this.#contenedor.querySelector('[data-componente="listado"]');
+            listado.outerHTML = this.generarHTMLListado(lista);
             this.generarHTMLBuscador();
-            this.generarHTMLListado(lista);
             this.#eventosListado();
         });
     }
@@ -142,7 +142,8 @@ class Jugueteria{
 
                 switch(accion){
                     case 'ver':{
-                        x.parentNode.addEventListener('click', (dataId) =>{
+                        x.parentNode.addEventListener('click', () =>{
+                            
                             const j = this.obtenerJuguete(dataId);
                             if(!j){
                                 alert('El id no existe');
@@ -168,7 +169,7 @@ class Jugueteria{
 
     #eventosPropiedades(juguete){
         const form = this.#contenedor.querySelector('[data-componente="propiedades"]');
-        form.addEventListener('submit', (e) =>{
+        form?.addEventListener('submit', (e) =>{
             e.preventDefault();
 
 
@@ -216,7 +217,6 @@ class Jugueteria{
     }
 
     generarHTMLListado(listaJuguetes) {
-        listaJuguetes = this.#juguetes;
         const filas = listaJuguetes.map(j => `
             <div class="jg-tabla-fila">
                     <div>${j.nombre}</div>
@@ -267,8 +267,8 @@ const app = new Jugueteria();
 
 
 // no funciona
-// buscar 
 // nuevo juguete
 // ver
+// boton de borrar
 
 app.iniciarApp('#app');
