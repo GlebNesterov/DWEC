@@ -105,35 +105,47 @@ class Jugueteria{
         });
     }
 
-    /*
     #eventosListado(){
         const div = this.#contenedor.querySelector('[data-componente="listado"]');
         div.addEventListener('click', (e) =>{
-            const botones = this.#contenedor.querySelectorAll('[data-accion]')
+            e.preventDefault();
+
+            console.log();
+            
+            const botones = this.#contenedor.querySelectorAll('[data-accion]');
             if(botones === null){
                 return;
             }
+            const boton = e.closest('button');
+            
 
             const accion = boton.dataset.accion;
             const id = boton.dataset.id;
-            
-            if(accion === 'ver'){
-                const j = this.obtenerJuguete(id);
-                if(!j){
-                    alert('El id no existe');
-                }else{
+
+            switch(accion){
+                case 'ver':{
+                    const j = this.obtenerJuguete(id);
                     this.#navegarPropiedades(j);
+                    break;
+                }                    
+                case 'borrar':{
+                    this.borrarJuguete(id);
+                    this.#navegarInicio();
+                    break;
+                } 
+                case 'nuevo': {
+                    this.#navegarPropiedades(new Juguete());
+                    break;
                 }
-            }else if(accion === 'borrar'){
-                this.borrarJuguete(id);
-                this.#navegarInicio();
-            }else if (accion === 'nuevo'){
-                this.#navegarPropiedades(new Juguete());
-            }
+                default : {
+                    alert('No se ha podido hacer la accion');
+                    break;
+                }
+            }   
         });
     }
-    */
 
+    /*
     #eventosListado(){
         const botones = this.#contenedor.querySelectorAll('[data-accion]');
         botones.forEach(x => {
@@ -166,6 +178,7 @@ class Jugueteria{
                 }
             });
     }
+    */
 
     #eventosPropiedades(juguete){
         const form = this.#contenedor.querySelector('[data-componente="propiedades"]');
