@@ -13,7 +13,7 @@ class Biblioteca{
     #ubicacion;
     #libros
     
-    constructor(bibliotecaid, nombre, ubicacion, libros) {
+    constructor(bibliotecaid = 0, nombre, ubicacion, libros) {
         this.#_bibliotecaid = bibliotecaid;
         this.#nombre = nombre;
         this.#ubicacion = ubicacion;

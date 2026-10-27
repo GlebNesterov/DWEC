@@ -22,7 +22,7 @@ class Libro{
     #prestamos;
 
 
-    constructor(libroid, titulo, isbn, autorid, bibliotecaid, prestamos){
+    constructor(libroid = 0, titulo, isbn, autorid, bibliotecaid, prestamos){
         this.#_libroid = libroid;
         this.#titulo = titulo;
         this.#isbn = isbn;

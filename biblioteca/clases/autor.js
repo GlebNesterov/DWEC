@@ -19,7 +19,7 @@ class Autor {
     #biografia;
     #libros
 
-    constructor(autorid, nombre, nacionalidad, biografia, libros){
+    constructor(autorid = 0, nombre, nacionalidad, biografia, libros){
         this.#_autorid = autorid;
         this.#nombre = nombre;
         this.#nacionalidad = nacionalidad;
