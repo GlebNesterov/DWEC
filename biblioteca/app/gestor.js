@@ -1,12 +1,27 @@
-'use strict';
-
-import Libros from '/biblioteca/clases/libro.js';
+import Libro from '/biblioteca/clases/libro.js';
 import Autor from '/biblioteca/clases/autor.js';
 import Biblioteca from '/biblioteca/clases/biblioteca.js';
 import datos from '/biblioteca/data/datos.js';
 
-const $biblio = (function (){
+    console.log(libros);
 
+const $biblio = (function (){
+    let libros = [];
+    let autores = [];
+    let bibliotecas = [];
+
+    // METODOS PRIVADOS
+    function procesarLibros(){
+        return libros.map();
+    }
+
+    function procesarAutores(){
+        return autores.map();
+    }
+
+    function procesarBibliotecas(){
+        return bibliotecas.map();
+    }
 
     // GENERAR HTML
 
@@ -29,7 +44,7 @@ const $biblio = (function (){
     // BUSCAR LIBRO POR NOMBRE O AUTOR
 
     function buscarLibroPorTitulo(titulo){
-
+        
     }
 
     function buscarLibroPorAutor(autor){
