@@ -13,6 +13,8 @@
         devolución. 
 */
 
+import { esc, opciones } from './utilidades.js';
+
 class Libro{
     #_libroid;
     #titulo;
@@ -32,11 +34,7 @@ class Libro{
     }
 
     estaDisponible(){
-        if(this.#prestamos.lenght !== 0){
-            return 'no disponible'
-        }else{
-            return 'disponible'
-        }
+        return !this.#prestamos.some(p => !p.fechaDevolucion);
     }
 
     get libroid(){
@@ -70,20 +68,102 @@ class Libro{
         return this.#prestamos;
     }
 
-    generarHTMLCreacion(){
-        return ``;
+    generarHTMLCreacion(autores = [], bibliotecas = []){
+        return `
+            <section>
+            <h2>Nuevo libro</h2>
+            <form class="biblio-libro-form-crear">
+                <label>Título <input type="text" name="titulo" required></label>
+                <label>ISBN <input type="text" name="isbn" required></label>
+                <label>Autor
+                    <select name="autorId" required>
+                        ${opciones(autores, a => a.autorid, a => a.nombre)}
+                    </select>
+                </label>
+                <label>Biblioteca
+                    <select name="bibliotecaId" required>
+                        ${opciones(bibliotecas, b => b.bibliotecaid, b => b.nombre)}
+                    </select>
+                </label>
+                <button type="submit">Guardar</button>
+                <button type="button" class="biblio-libro-listar">Cancelar</button>
+            </form>
+        </section>
+        `;
     }
     
-    generarHTMLPropiedades(){
-        return ``;   
+    generarHTMLPropiedades(autor, biblioteca) {
+        const disponible = this.estaDisponible;
+        // Solo se muestra la acción que tiene sentido según el estado
+        const botonPrestamo = disponible
+            ? `<button class="biblio-libro-prestar" data-id="${this.#_libroid}">Crear préstamo</button>`
+            : `<button class="biblio-libro-devolver" data-id="${this.#_libroid}">Devolver préstamo</button>`;
+
+        return `
+        <section class="biblio-libro-detalle" data-id="${this.#_libroid}">
+            <h2>${esc(this.#titulo)}</h2>
+            <dl>
+                <dt>ISBN</dt><dd>${esc(this.#isbn)}</dd>
+                <dt>Autor</dt><dd>${autor ? esc(autor.nombre) : 'Desconocido'}</dd>
+                <dt>Biblioteca</dt><dd>${biblioteca ? esc(biblioteca.nombre) : 'Sin asignar'}</dd>
+                <dt>Estado</dt>
+                <dd class="${disponible ? 'biblio-disponible' : 'biblio-no-disponible'}">
+                    ${disponible ? 'Disponible' : 'Prestado'}
+                </dd>
+            </dl>
+            <nav>
+                <button class="biblio-libro-editar" data-id="${this.#_libroid}">Editar</button>
+                <button class="biblio-libro-borrar" data-id="${this.#_libroid}">Borrar</button>
+                <button class="biblio-libro-listar-prestamos" data-id="${this.#_libroid}">Ver préstamos</button>
+                ${botonPrestamo}
+                <button class="biblio-libro-listar">Volver al listado</button>
+            </nav>
+        </section>`;
     }
 
-    generarHTMLEdicion(){
-        return ``;
+    generarHTMLEdicion(autores = [], bibliotecas = []){
+        return `
+            <section>
+                <h2>Editar libro</h2>
+                <form class="biblio-libro-form-editar" data-id="${this.#_libroid}">
+                    <label>Título <input type="text" name="titulo" value="${esc(this.#titulo)}" required></label>
+                    <label>ISBN <input type="text" name="isbn" value="${esc(this.#isbn)}" required></label>
+                    <label>Autor
+                        <select name="autorId">
+                            ${opciones(autores, a => a.autorid, a => a.nombre, this.#autorid)}
+                        </select>
+                    </label>
+                    <label>Biblioteca
+                        <select name="bibliotecaId">
+                            ${opciones(bibliotecas, b => b.bibliotecaid, b => b.nombre, this.#bibliotecaid)}
+                        </select>
+                    </label>
+                    <button type="submit">Guardar cambios</button>
+                    <button type="button" class="biblio-libro-ver" data-id="${this.#_libroid}">Cancelar</button>
+                </form>
+            </section>
+        `;
     }
 
     generarHTMLLIstadoPrestamos(){
-        return ``;
+        const filas = this.#prestamos.map(p => `
+            <tr>
+                <td>${esc(p.fechaPrestamo)}</td>
+                <td>${p.fechaDevolucion ? esc(p.fechaDevolucion) : '<em>Pendiente de devolución</em>'}</td>
+            </tr>`).join('');
+
+        return `
+            <section>
+            <h2>Préstamos de «${esc(this.#titulo)}»</h2>
+            ${this.#prestamos.length === 0
+                ? '<p>Este libro nunca se ha prestado.</p>'
+                : ` <table>
+                        <thead><tr><th>Fecha de préstamo</th><th>Fecha de devolución</th></tr></thead>
+                        <tbody>${filas}</tbody>
+                    </table>`}
+            <button class="biblio-libro-ver" data-id="${this.#_libroid}">Volver al libro</button>
+        </section>
+        `;
     }
 }
 export default Libro;

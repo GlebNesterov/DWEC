@@ -2,8 +2,7 @@ import Libro from '/biblioteca/clases/libro.js';
 import Autor from '/biblioteca/clases/autor.js';
 import Biblioteca from '/biblioteca/clases/biblioteca.js';
 import datos from '/biblioteca/data/datos.js';
-
-    console.log(libros);
+import { esc } from '../clases/utilidades.js';
 
 const $biblio = (function (){
     let libros = [];

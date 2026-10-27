@@ -37,10 +37,30 @@ class Biblioteca{
     }
 
     generarHTMLCreacion(){
-        return ``;
+        return `
+            <section>
+                <h2>Nueva biblioteca</h2>
+                <form class="biblio-biblioteca-form-crear">
+                    <label>Nombre <input type="text" name="nombre" required></label>
+                    <label>Ubicación <input type="text" name="ubicacion" required></label>
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="biblio-biblioteca-listar">Cancelar</button>
+                </form>
+            </section>
+        `;
     }
 
     generarHTMLEdicion(){
-        return ``;
+        return `
+            <section>
+                <h2>Editar biblioteca</h2>
+                <form class="biblio-biblioteca-form-editar" data-id="${this.#_bibliotecaid}">
+                    <label>Nombre <input type="text" name="nombre" value="${esc(this.#nombre)}" required></label>
+                    <label>Ubicación <input type="text" name="ubicacion" value="${esc(this.#ubicacion)}" required></label>
+                    <button type="submit">Guardar cambios</button>
+                    <button type="button" class="biblio-biblioteca-listar">Cancelar</button>
+                </form>
+            </section>
+        `;
     }
 }

@@ -12,6 +12,8 @@
 
 */
 
+import { esc } from './utilidades.js';
+
 class Autor {
     #_autorid;
     #nombre;
@@ -48,15 +50,71 @@ class Autor {
     }
 
     generarHTMCreacin(){
-        return ``;
+        return `
+            <section>
+            <h2>Nuevo autor</h2>
+            <form class="biblio-autor-form-crear">
+                <label>Nombre <input type="text" name="nombre" required></label>
+                <label>Nacionalidad <input type="text" name="nacionalidad" required></label>
+                <label>Biografía <textarea name="biografia" rows="4"></textarea></label>
+                <button type="submit">Guardar</button>
+                <button type="button" class="biblio-autor-listar">Cancelar</button>
+            </form>
+            </section>`;
     }
 
     generarHTMLPropiedades(){
-        return ``;
+        const filas = this.#libros.map(titulo => `
+            <tr>
+                <td>${esc(titulo)}</td>
+                <td>
+                    <button class="biblio-autor-quitar-libro"
+                            data-id="${this.#_autorid}"
+                            data-titulo="${esc(titulo)}">Eliminar</button>
+                </td>
+            </tr>`).join('');
+
+        return `
+            <section class="biblio-autor-detalle" data-id="${this.#_autorid}">
+            <h2>${esc(this.#nombre)}</h2>
+            <p><strong>Nacionalidad:</strong> ${esc(this.#nacionalidad)}</p>
+            <p>${esc(this.#biografia)}</p>
+
+            <h3>Libros publicados</h3>
+            ${this.#libros.length === 0
+                ? '<p>Este autor no tiene libros registrados.</p>'
+                : `<table>
+                    <thead><tr><th>Título</th><th>Acciones</th></tr></thead>
+                    <tbody>${filas}</tbody>
+                    </table>`}
+
+            <form class="biblio-autor-form-anadir-libro" data-id="${this.#_autorid}">
+                <input type="text" name="titulo" placeholder="Título del nuevo libro" required>
+                <button type="submit">Añadir libro</button>
+            </form>
+
+            <nav>
+                <button class="biblio-autor-editar" data-id="${this.#_autorid}">Editar</button>
+                <button class="biblio-autor-borrar" data-id="${this.#_autorid}">Borrar</button>
+                <button class="biblio-autor-listar">Volver al listado</button>
+            </nav>
+        </section>
+        `;
     }
 
     generarHTMLEdicion(){
-        return ``;
+        return `
+            <section>
+                <h2>Editar autor</h2>
+                <form class="biblio-autor-form-editar" data-id="${this.#_autorid}">
+                    <label>Nombre <input type="text" name="nombre" value="${esc(this.#nombre)}" required></label>
+                    <label>Nacionalidad <input type="text" name="nacionalidad" value="${esc(this.#nacionalidad)}" required></label>
+                    <label>Biografía <textarea name="biografia" rows="4">${esc(this.#biografia)}</textarea></label>
+                    <button type="submit">Guardar cambios</button>
+                    <button type="button" class="biblio-autor-ver" data-id="${this.#_autorid}">Cancelar</button>
+                </form>
+            </section>
+        `;
     }
 }
 export default Autor;
