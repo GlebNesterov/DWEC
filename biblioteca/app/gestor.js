@@ -1,9 +1,9 @@
 'use strict';
 
-import Libros from 'libros.js';
-import Autor from 'autor.js';
-import Biblioteca from 'biblioteca.js';
-import datos from 'datos.js';
+import Libros from '/biblioteca/clases/libro.js';
+import Autor from '/biblioteca/clases/autor.js';
+import Biblioteca from '/biblioteca/clases/biblioteca.js';
+import datos from '/biblioteca/data/datos.js';
 
 const $biblio = (function (){
 
