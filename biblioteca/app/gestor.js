@@ -41,7 +41,7 @@ const $biblio = (function (){
 
     // GENERAR HTML
 
-    function generarListadoAutores(){
+    function generarHTMLListadoAutores(){
         const filas = autores.map(a => `
         <tr>
             <td>${esc(a.nombre)}</td>
@@ -343,20 +343,71 @@ const $biblio = (function (){
     */
 
     function borrarBiblioteca(id){
+        let biblioteca = buscarBiblioteca(id);
+        if(!biblioteca){
+            return null
+        }
 
+        const librosBiblio = libros.filter(l => l.bibliotecaid === biblioteca.bibliotecaid);
+
+        librosBiblio.forEach(l => borrarLibro(l.libroid));
+            
+        bibliotecas = bibliotecas.filter(b => b.bibliotecaid !== biblioteca.bibliotecaid);
+
+        return biblioteca;
     }
+
+    /*
+        console.log(borrarBiblioteca(999));                              // null
+        console.log(borrarBiblioteca(1)?.nombre);                        // Biblioteca Central
+        console.log(bibliotecas.length);                                 // 2
+        console.log(libros.length);                                      // 7
+        console.log(libros.filter(l => l.bibliotecaid === 1).length);    // 0
+        console.log(buscarAutor(1).libros);                              // ["El Amante Japonés"]
+        console.log(crearBiblioteca({ nombre: 'X', ubicacion: 'Y' })?.bibliotecaid); // 4
+    */
 
     // PRESTAMOS
 
     function crearPrestamo(libro){
+        if(!libro || !libro.estaDisponible){
+            return null;
+        }
 
+        const prestamo = {fechaPrestamo: new Date().toISOString().slice(0, 10)};
+        libro.prestamo.push(prestamo);
+
+        return prestamo;
     }
 
-    function devolverPrestamo(){
-        
+    function devolverPrestamo(libro){
+        if(!libro || libro.estaDisponible){
+            return null;
+        }
+
+        const prestamo = libro.prestamos.find(p => !p.fechaDevolucion);
+        prestamo.fechaDevolucion = new Date().toISOString.slice(0,10);
+
+        return prestamo;
     }
 
     return {
-        
+        generarHTMLListadoAutores,
+        generarHTMLListadoBiblioteca,
+        generarHTMLListadoLibros,
+        generarHTMListadoBuscador,
+        buscarLibro,
+        buscarAutor,
+        buscarLibroPorTitulo,
+        buscarLibroPorAutor,
+        buscarBiblioteca,
+        crearLibro,
+        crearAutor,
+        crearBiblioteca,
+        borrarLibro,
+        borrarAutor,
+        borrarBiblioteca,
+        crearPrestamo,
+        devolverPrestamo
     };
 })();
