@@ -23,8 +23,7 @@ class Libro{
     #bibliotecaid;
     #prestamos;
 
-
-    constructor(libroid = 0, titulo, isbn, autorid, bibliotecaid, prestamos){
+    constructor(libroid = 0, titulo, isbn, autorid, bibliotecaid, prestamos = []){
         this.#_libroid = libroid;
         this.#titulo = titulo;
         this.#isbn = isbn;
@@ -33,7 +32,7 @@ class Libro{
         this.#prestamos =  prestamos;
     }
 
-    estaDisponible(){
+    get estaDisponible(){
         return !this.#prestamos.some(p => !p.fechaDevolucion);
     }
 

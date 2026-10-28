@@ -11,13 +11,11 @@ class Biblioteca{
     #_bibliotecaid;
     #nombre;
     #ubicacion;
-    #libros
     
-    constructor(bibliotecaid = 0, nombre, ubicacion, libros) {
+    constructor(bibliotecaid = 0, nombre, ubicacion) {
         this.#_bibliotecaid = bibliotecaid;
         this.#nombre = nombre;
         this.#ubicacion = ubicacion;
-        this.#libros = libros;
     }
 
     get bibliotecaid(){
@@ -30,10 +28,6 @@ class Biblioteca{
 
     get ubicacion(){
         return this.#ubicacion;
-    }
-
-    get libros(){
-        return this.#libros;
     }
 
     generarHTMLCreacion(){
@@ -64,3 +58,4 @@ class Biblioteca{
         `;
     }
 }
+export default Biblioteca;
