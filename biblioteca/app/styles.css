@@ -1,4 +1,4 @@
-.jg-navegacion{
+.biblio-navegacion{
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -12,7 +12,7 @@
         }
 }
 
-.jg-tabla-fila {
+.biblio-tabla-fila {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -23,7 +23,7 @@
         }
 }
 
-.jg-tabla-fila.jg-cabecera {
+.biblio-tabla-fila.biblio-cabecera {
     background-color: azure;
     text-align: center;
     font-weight: bolder;

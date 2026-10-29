@@ -98,31 +98,49 @@ const $biblio = (function (){
         const autor = buscarAutor(l.autorid);
         const biblio = buscarBiblioteca(l.bibliotecaid);
         const acciones = conAcciones ? `
-            <button class="biblio-libro-ver" data-id="${l.libroid}">Ver</button>
-            <button class="biblio-libro-editar" data-id="${l.libroid}">Editar</button>
-            <button class="biblio-libro-borrar" data-id="${l.libroid}">Borrar</button>`
-            : `<button class="biblio-libro-ver" data-id="${l.libroid}">Ver</button>`;
+            <button data-accion="ver" data-id="${l.libroid}">Ver</button>
+            <button data-accion="editar" data-id="${l.libroid}">Editar</button>
+            <button data-accion="borrar" data-id="${l.libroid}">Borrar</button>`
+            : `<button data-accion="ver data-id="${l.libroid}">Ver</button>`;
         return `
-            <tr>
-                <td>${esc(l.titulo)}</td>
-                <td>${esc(l.isbn)}</td>
-                <td>${autor ? esc(autor.nombre) : '—'}</td>
-                <td>${biblio ? esc(biblio.nombre) : '—'}</td>
-                <td>${l.estaDisponible ? 'Disponible' : 'Prestado'}</td>
-                <td>${acciones}</td>
-            </tr>`;
+            <div class="biblio-tabla-fila">
+                <div>${esc(l.titulo)}</div>
+                <div>${esc(l.isbn)}</div>
+                <div>${autor ? esc(autor.nombre) : '—'}</div>
+                <td>${biblio ? esc(biblio.nombre) : '—'}</div>
+                <div>${l.estaDisponible ? 'Disponible' : 'Prestado'}</div>
+                <div>${acciones}</div>
+            </div>`;
     }
 
 
     function generarHTMLListadoLibros(){
+        const autor = buscarAutor()
+
+        const filas = libros.map(i =>`
+            <div class="biblio-tabla-fila">
+                    <div>${esc(i.titulo)}</div>
+                    <div>${esc(i.isbn)}</div>
+                    <div>${autor ? esc(autor.nombre) : '--'}</div>
+                    <div>${i.bibliotecaid}</div>
+                    <div>${i.prestamo}</div>
+                    <div>
+                        <button data-accion="ver" data-id="${i.libroid}">Ver</button>
+                        <button data-accion="borrar" data-id="${i.libroid}">Borrar</button>
+                        <button data-accion="editar" data-id="${i.libroid}">Editar</button>
+                    </div>
+            </div>`).join("");
+
         return `
             <section>
                 <h2>Libros</h2>
-                <button class="biblio-libro-crear">Crear libro</button>
-                <table>
-                    <thead><tr><th>Titulo</th><th>ISBN</th><th>Autor</th><th>Biblioteca</th><th><th>Prestamos</th></th></tr>
-                    <tbody>${libros.map(l => filaLibro(l)).join('')}</tbody>
-                </table>
+                <div data-componente="listado" class="biblio-tabla">
+                    <button class="biblio-libro-crear">Crear libro</button>
+                    <div class="biblio-tabla-fila biblio-cabecera">
+                        <div>Titulo</div><div>ISBN</div><div>Autor</div><div>Biblioteca</div><div>Prestamos</div><div>Accion</div>
+                    </div>
+                    <div class="biblio-tabla-fila">${libros.map(l => filaLibro(l)).join('')}</div>
+                </div>
             </section>
         `;
     }
