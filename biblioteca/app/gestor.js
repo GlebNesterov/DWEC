@@ -43,57 +43,58 @@ const $biblio = (function (){
 
     function generarHTMLListadoAutores(){
         const filas = autores.map(a => `
-        <tr>
-            <td>${esc(a.nombre)}</td>
-            <td>${esc(a.nacionalidad)}</td>
-            <td>${a.libros.length}</td>
-            <td>
-                <button class="biblio-autor-ver" data-id="${a.autorid}">Ver</button>
-                <button class="biblio-autor-editar" data-id="${a.autorid}">Editar</button>
-                <button class="biblio-autor-borrar" data-id="${a.autorid}">Borrar</button>
-            </td>
-        </tr>`).join('');
+        <div class="biblio-tabla-fila">
+            <div>${esc(a.nombre)}</div>
+            <div>${esc(a.nacionalidad)}</div>
+            <div>${a.libros.length}</div>
+            <div>
+                <button data-accion="ver" data-id="${a.autorid}">Ver</button>
+                <button data-accion="borrar" data-id="${a.autorid}">Editar</button>
+                <button data-accion="editar" data-id="${a.autorid}">Borrar</button>
+            </div>
+        </div>`).join('');
 
         return `
             <section>
                 <h2>Autores</h2>
                 <button class="biblio-autor-crear">Crear autor</button>
-                <table>
-                    <thead><tr><th>Nombre</th><th>Nacionalidad</th><th>Libros</th><th>Acciones</th></tr></thead>
-                    <tbody>${filas}</tbody>
-                </table>
+                <div class="biblio-tabla-fila biblio-cabecera">
+                    <div>Nombre</div><div>Nacionalidad</div><div>Libros</div><div>Acciones</div>
+                </div>
+                ${filas}
             </section>
         `;
     }
 
     function generarHTMLListadoBiblioteca(){
         const filas = bibliotecas.map(b => {
-        const total = libros.filter(l => l.bibliotecaid === b.bibliotecaid).length;
-        return `
-        <tr>
-            <td>${esc(b.nombre)}</td>
-            <td>${esc(b.ubicacion)}</td>
-            <td>${total}</td>
-            <td>
-                <button class="biblio-biblioteca-ver" data-id="${b.bibliotecaid}">Ver</button>
-                <button class="biblio-biblioteca-editar" data-id="${b.bibliotecaid}">Editar</button>
-                <button class="biblio-biblioteca-borrar" data-id="${b.bibliotecaid}">Borrar</button>
-            </td>
-        </tr>`;
-    }).join('');
+            const total = libros.filter(l => l.bibliotecaid === b.bibliotecaid).length;
+            return `
+            <div class="biblio-tabla-fila">
+                <div>${esc(b.nombre)}</div>
+                <div>${esc(b.ubicacion)}</div>
+                <div>${total}</div>
+                <div>
+                    <button class="biblio-biblioteca-ver" data-id="${b.bibliotecaid}">Ver</button>
+                    <button class="biblio-biblioteca-editar" data-id="${b.bibliotecaid}">Editar</button>
+                    <button class="biblio-biblioteca-borrar" data-id="${b.bibliotecaid}">Borrar</button>
+                </div>
+            </div>`;
+        }).join('');
 
         return `
             <section>
                 <h2>Bibliotecas</h2>
                 <button class="biblio-biblioteca-crear">Crear biblioteca</button>
-                <table>
-                    <thead><tr><th>Nombre</th><th>Ubicación</th><th>Libros</th><th>Acciones</th></tr></thead>
-                    <tbody>${filas}</tbody>
-                </table>
+                <div class="biblio-tabla-fila biblio-cabecera">
+                    <div>Nombre</div><div>Ubicación</div><div>Libros</div><div>Acciones</div>
+                </div>
+                ${filas}
             </section>
         `;
     }
 
+    /*
     function filaLibro(l, conAcciones = true) {
         const autor = buscarAutor(l.autorid);
         const biblio = buscarBiblioteca(l.bibliotecaid);
@@ -112,18 +113,19 @@ const $biblio = (function (){
                 <div>${acciones}</div>
             </div>`;
     }
+    */
 
 
     function generarHTMLListadoLibros(){
-        const autor = buscarAutor()
+        
 
         const filas = libros.map(i =>`
             <div class="biblio-tabla-fila">
                     <div>${esc(i.titulo)}</div>
                     <div>${esc(i.isbn)}</div>
-                    <div>${autor ? esc(autor.nombre) : '--'}</div>
-                    <div>${i.bibliotecaid}</div>
-                    <div>${i.prestamo}</div>
+                    <div>${buscarAutor(i.autorid) ? buscarAutor(i.autorid).nombre : '--' }</div>
+                    <div>${buscarBiblioteca(i.bibliotecaid) ? buscarBiblioteca(i.bibliotecaid).nombre : '--' }</div>
+                    <div>${i.estaDisponible ? 'Prestado' : 'Disponible'}</div>
                     <div>
                         <button data-accion="ver" data-id="${i.libroid}">Ver</button>
                         <button data-accion="borrar" data-id="${i.libroid}">Borrar</button>
@@ -139,7 +141,7 @@ const $biblio = (function (){
                     <div class="biblio-tabla-fila biblio-cabecera">
                         <div>Titulo</div><div>ISBN</div><div>Autor</div><div>Biblioteca</div><div>Prestamos</div><div>Accion</div>
                     </div>
-                    <div class="biblio-tabla-fila">${libros.map(l => filaLibro(l)).join('')}</div>
+                    ${filas}
                 </div>
             </section>
         `;
@@ -212,6 +214,7 @@ const $biblio = (function (){
     console.log(buscarLibroPorAutor("").length);                    // 4
     console.log(buscarLibroPorAutor("mexic").length);               // 0 (busca en nombre, no en nacionalidad)
     */
+
 
     // BUSCAR POR IDS
 
