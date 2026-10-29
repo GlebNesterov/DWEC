@@ -82,7 +82,6 @@ const $biblio = (function (){
         </tr>`;
     }).join('');
 
-
         return `
             <section>
                 <h2>Bibliotecas</h2>
@@ -120,7 +119,10 @@ const $biblio = (function (){
             <section>
                 <h2>Libros</h2>
                 <button class="biblio-libro-crear">Crear libro</button>
-                <table>${cabeceraLibros}<tbody>${libros.map(l => filaLibro(l)).join('')}</tbody></table>
+                <table>
+                    <thead><tr><th>Titulo</th><th>ISBN</th><th>Autor</th><th>Biblioteca</th><th><th>Prestamos</th></th></tr>
+                    <tbody>${libros.map(l => filaLibro(l)).join('')}</tbody>
+                </table>
             </section>
         `;
     }
@@ -411,3 +413,21 @@ const $biblio = (function (){
         devolverPrestamo
     };
 })();
+
+const listarLibros = document.querySelector('#btn-listaLibros');
+const listarAutores = document.querySelector('#btn-listaAutores');
+const listarBiblio = document.querySelector('#btn-listaBiblio');
+
+const app = document.querySelector('#app');
+
+listarLibros.addEventListener('click', () =>{
+    app.innerHTML = $biblio.generarHTMLListadoLibros();
+});
+
+listarAutores.addEventListener('click', ()=>{
+    app.innerHTML = $biblio.generarHTMLListadoAutores();
+});
+
+listarBiblio.addEventListener('click', ()=>{
+    app.innerHTML = $biblio.generarHTMLListadoBiblioteca();
+});
