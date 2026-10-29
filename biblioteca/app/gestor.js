@@ -190,9 +190,16 @@ const $biblio = (function (){
     function buscarLibroPorAutor(autor){
         if(!autor){
             return [...libros];
-        }   
-        return autores.filter(a => a.nombre.toLowerCase().includes(autor.toLowerCase().trim()));
+        }
+
+        let librosAutor = libros;
+
+        librosAutor = librosAutor.filter(l => buscarAutor(l.autorid).nombre.toLowerCase() === autor.toLowerCase().trim());
+        return librosAutor;
+        //autores.filter(a => a.nombre.toLowerCase().includes(autor.toLowerCase().trim()));
     }
+
+    console.log(buscarLibroPorAutor('Isabel Allende'));
 
     /*
     console.log('Libros:', libros.length, '| último ID:', ultimoIdLibro);       // 12 | 112
