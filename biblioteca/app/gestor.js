@@ -48,9 +48,9 @@ const $biblio = (function (){
             <div>${esc(a.nacionalidad)}</div>
             <div>${a.libros.length}</div>
             <div>
-                <button data-accion="ver" data-id="${a.autorid}">Ver</button>
-                <button data-accion="borrar" data-id="${a.autorid}">Borrar</button>
-                <button data-accion="editar" data-id="${a.autorid}">Editar</button>
+                <button class="biblio-autor-ver" data-id="${a.autorid}">Ver</button>
+                <button class="biblio-autor-editar" data-id="${a.autorid}">Editar</button>
+                <button class="biblio-autor-borrar" data-id="${a.autorid}">Borrar</button>
             </div>
         </div>`).join('');
 
@@ -94,37 +94,32 @@ const $biblio = (function (){
         `;
     }
 
-    function generarHTMLListadoLibros(){
-        
-        const filas = libros.map(i =>`
-            <div class="biblio-tabla-fila">
-                    <div>${esc(i.titulo)}</div>
-                    <div>${esc(i.isbn)}</div>
-                    <div>${buscarAutor(i.autorid) ? buscarAutor(i.autorid).nombre : '--' }</div>
-                    <div>${buscarBiblioteca(i.bibliotecaid) ? buscarBiblioteca(i.bibliotecaid).nombre : '--' }</div>
-                    <div>${i.estaDisponible ? 'Disponible' : 'Prestado'}</div>
-                    <div>
-                        <button data-accion="ver" data-id="${i.libroid}">Ver</button>
-                        <button data-accion="borrar" data-id="${i.libroid}">Borrar</button>
-                        <button data-accion="editar" data-id="${i.libroid}">Editar</button>
-                    </div>
-            </div>`).join("");
+    // AÑADIDO: faltaban cabeceraLibros y filaLibro (los usa el buscador)
+    const cabeceraLibros = `
+        <div class="biblio-tabla-fila biblio-cabecera">
+            <div>Titulo</div><div>ISBN</div><div>Autor</div><div>Biblioteca</div><div>Estado</div><div>Acciones</div>
+        </div>`;
 
+    function filaLibro(l, conAcciones = true){
+        const autor = buscarAutor(l.autorid);
+        const biblio = buscarBiblioteca(l.bibliotecaid);
+        const acciones = conAcciones
+            ? `<button class="biblio-libro-ver" data-id="${l.libroid}">Ver</button>
+               <button class="biblio-libro-editar" data-id="${l.libroid}">Editar</button>
+               <button class="biblio-libro-borrar" data-id="${l.libroid}">Borrar</button>`
+            : `<button class="biblio-libro-ver" data-id="${l.libroid}">Ver</button>`;
         return `
-            <section>
-                <h2>Libros</h2>
-                <div data-componente="listado" class="biblio-tabla">
-                    <button class="biblio-libro-crear">Crear libro</button>
-                    <div class="biblio-tabla-fila biblio-cabecera">
-                        <div>Titulo</div><div>ISBN</div><div>Autor</div><div>Biblioteca</div><div>Prestamos</div><div>Accion</div>
-                    </div>
-                    ${filas}
-                </div>
-            </section>
-        `;
+            <div class="biblio-tabla-fila">
+                <div>${esc(l.titulo)}</div>
+                <div>${esc(l.isbn)}</div>
+                <div>${autor ? esc(autor.nombre) : '--'}</div>
+                <div>${biblio ? esc(biblio.nombre) : '--'}</div>
+                <div>${l.estaDisponible ? 'Disponible' : 'Prestado'}</div>
+                <div>${acciones}</div>
+            </div>`;
     }
 
-    function generarHTMListadoBuscador(resultados, tipo){
+    function generarHTMLResultadoBuscador(resultados, tipo){
         if (resultados.length === 0) {
             return `<section><h2>Resultados</h2><p>No se han encontrado ${tipo}.</p></section>`;
         }
@@ -134,8 +129,8 @@ const $biblio = (function (){
                 <div class="biblio-tabla-fila">
                     <div>${esc(a.nombre)}</div>
                     <div>${esc(a.nacionalidad)}</div>
-                    <div>${a.libros.map(esc).join(', ')}</div>
-                    <div><button data-accion="ver" data-id="${a.autorid}">Ver</button></div>
+                    <div>${a.libros.map(t => esc(t)).join(', ')}</div>
+                    <div><button class="biblio-autor-ver" data-id="${a.autorid}">Ver</button></div>
                 </div>`).join('');
             return `
                 <section>
@@ -160,6 +155,40 @@ const $biblio = (function (){
             </section>`;
     }
 
+    function generarHTMLListadoLibros(){
+        
+        // CORREGIDO: los botones usaban "l.libroid" y aquí la variable es "i"
+        const filas = libros.map(i =>`
+            <div class="biblio-tabla-fila">
+                    <div>${esc(i.titulo)}</div>
+                    <div>${esc(i.isbn)}</div>
+                    <div>${buscarAutor(i.autorid) ? buscarAutor(i.autorid).nombre : '--' }</div>
+                    <div>${buscarBiblioteca(i.bibliotecaid) ? buscarBiblioteca(i.bibliotecaid).nombre : '--' }</div>
+                    <div>${i.estaDisponible ? 'Disponible' : 'Prestado'}</div>
+                    <div>
+                        <button class="biblio-libro-ver" data-id="${i.libroid}">Ver</button>
+                        <button class="biblio-libro-editar" data-id="${i.libroid}">Editar</button>
+                        <button class="biblio-libro-borrar" data-id="${i.libroid}">Borrar</button>
+                    </div>
+            </div>`).join("");
+
+        return `
+            <section>
+                <h2>Libros</h2>
+                <div data-componente="listado" class="biblio-tabla">
+                    <button class="biblio-libro-crear">Crear libro</button>
+                    <div class="biblio-tabla-fila biblio-cabecera">
+                        <div>Titulo</div><div>ISBN</div><div>Autor</div><div>Biblioteca</div><div>Prestamos</div><div>Accion</div>
+                    </div>
+                    ${filas}
+                </div>
+            </section>
+        `;
+    }
+
+    // CORREGIDO: eliminada generarHTMListadoBuscador (duplicada, con data-accion);
+    // ya tienes generarHTMLResultadoBuscador
+
     // BUSCAR LIBRO POR NOMBRE O AUTOR
 
     function buscarLibroPorTitulo(titulo){
@@ -169,16 +198,12 @@ const $biblio = (function (){
         return libros.filter(l => l.titulo.toLowerCase().includes(titulo.toLowerCase().trim()));
     }
 
+    // CORREGIDO: el buscador espera AUTORES (no libros) cuando el tipo es 'autores'
     function buscarLibroPorAutor(autor){
         if(!autor){
-            return [...libros];
+            return [...autores];
         }
-
-        let librosAutor = libros;
-
-        librosAutor = librosAutor.filter(l => buscarAutor(l.autorid).nombre.toLowerCase() === autor.toLowerCase().trim());
-        return librosAutor;
-        //autores.filter(a => a.nombre.toLowerCase().includes(autor.toLowerCase().trim()));
+        return autores.filter(a => a.nombre.toLowerCase().includes(autor.toLowerCase().trim()));
     }
 
     //console.log(buscarLibroPorAutor('Isabel Allende')); // Lista de 3 libros
@@ -241,10 +266,10 @@ const $biblio = (function (){
     function crearAutor(autor){
         let nacionalidad = autor.nacionalidad?.trim();
         let nombre = autor.nombre?.trim();
-        let biografia = autor.biografia?.trim();
+        let biografia = autor.biografia?.trim() ?? '';   // CORREGIDO: la biografía es opcional
 
         
-        if(!nombre || !nacionalidad || !biografia){
+        if(!nombre || !nacionalidad){                    // CORREGIDO: ya no se exige biografía
             return null;
         }
         let nuevo = new Autor(++ultimoIdAutor, nombre, nacionalidad, biografia, autor.libros);
@@ -319,8 +344,8 @@ const $biblio = (function (){
             if(pos !== -1){
                 autor.libros.splice(pos, 1);
             }
-            return libro;
         }
+        return libro;   // CORREGIDO: antes solo devolvía el libro si el autor existía
     }
 
     /*
@@ -403,16 +428,89 @@ const $biblio = (function (){
         return prestamo;
     }
 
+    // EDITAR OBJETOS
+
+    function editarLibro(id, datos){
+        const viejo = buscarLibro(id);
+
+        if(!viejo || !datos.titulo?.trim() || !datos.isbn?.trim()){
+            return null;
+        }
+
+        const autorViejo = buscarAutor(viejo.autorid);
+        if(autorViejo){
+            const pos = autorViejo.libros.indexOf(viejo.titulo);    
+            if(pos !== -1){
+                autorViejo.libros.splice(pos, 1);
+            }
+        }
+
+        const nuevo = new Libro(viejo.libroid, datos.titulo.trim(), datos.isbn.trim(),Number(datos.autorId), Number(datos.bibliotecaId), viejo.prestamos);
+        libros = libros.map(l => l.libroid === viejo.libroid ? nuevo : l);   // CORREGIDO: era ": 1"
+
+        // AÑADIDO: el título nuevo se guarda en el autor (antes solo se quitaba el viejo)
+        const autorNuevo = buscarAutor(nuevo.autorid);
+        if(autorNuevo){
+            autorNuevo.libros.push(nuevo.titulo);
+        }
+        return nuevo;
+    }
+
+    function editarAutor(id, datos){
+
+        const viejo = buscarAutor(id);
+        if(!viejo || !datos.nombre?.trim() || !datos.nacionalidad?.trim()) {
+            return null;
+        }
+
+        const nuevo = new Autor(viejo.autorid, datos.nombre.trim(), datos.nacionalidad.trim(),datos.biografia?.trim() ?? '', viejo.libros);
+        autores = autores.map(a => a.autorid === viejo.autorid ? nuevo : a);
+        return nuevo;
+    }
+
+    function editarBiblioteca(id, datos){
+        const viejo = buscarBiblioteca(id);
+        if(!viejo || !datos.nombre?.trim() || !datos.ubicacion?.trim()) {
+            return null;
+        }
+
+        const nuevo = new Biblioteca(viejo.bibliotecaid, datos.nombre.trim(), datos.ubicacion.trim());
+        bibliotecas = bibliotecas.map(b => b.bibliotecaid === viejo.bibliotecaid ? nuevo : b);
+        return nuevo;
+    }
+
+    // AÑADIDO: faltaban estas dos funciones
+    function librosDeBiblioteca(id){
+        return libros.filter(l => l.bibliotecaid === Number(id));
+    }
+
+    function anadirLibroAAutor(autorid, titulo){
+        const autor = buscarAutor(autorid);
+        const limpio = titulo?.trim();
+        if(!autor || !limpio || autor.libros.includes(limpio)){
+            return null;
+        }
+        autor.libros.push(limpio);
+        return autor;
+    }
+
+    const listaAutores = () => [...autores];
+    const listaBibliotecas = () => [...bibliotecas];
+
     return {
+        listaAutores,
+        listaBibliotecas,
         generarHTMLListadoAutores,
         generarHTMLListadoBiblioteca,
         generarHTMLListadoLibros,
-        generarHTMListadoBuscador,
+        generarHTMLResultadoBuscador,   // CORREGIDO: antes exportaba generarHTMListadoBuscador
         buscarLibro,
         buscarAutor,
         buscarLibroPorTitulo,
         buscarLibroPorAutor,
         buscarBiblioteca,
+        librosDeBiblioteca,             // AÑADIDO
+        anadirLibroAAutor,              // AÑADIDO
         crearLibro,
         crearAutor,
         crearBiblioteca,
@@ -420,13 +518,18 @@ const $biblio = (function (){
         borrarAutor,
         borrarBiblioteca,
         crearPrestamo,
-        devolverPrestamo
+        devolverPrestamo,
+        editarLibro,
+        editarAutor,
+        editarBiblioteca
     };
 })();
 
+/*
 const listarLibros = document.querySelector('#btn-listaLibros');
 const listarAutores = document.querySelector('#btn-listaAutores');
 const listarBiblio = document.querySelector('#btn-listaBiblio');
+
 
 const app = document.querySelector('#app');
 
@@ -440,4 +543,135 @@ listarAutores.addEventListener('click', ()=>{
 
 listarBiblio.addEventListener('click', ()=>{
     app.innerHTML = $biblio.generarHTMLListadoBiblioteca();
+});
+*/
+
+const app = document.querySelector('#app');
+
+const pintar = html => app.innerHTML = html;
+const render = pintar;   // AÑADIDO: "render" se usaba pero no existía
+
+function vistaLibro(id){
+    const l = $biblio.buscarLibro(id);
+    if(!l){ return render($biblio.generarHTMLListadoLibros()); }
+    render(l.generarHTMLPropiedades($biblio.buscarAutor(l.autorid), $biblio.buscarBiblioteca(l.bibliotecaid)));
+}
+
+function vistaAutor(id){
+    const a = $biblio.buscarAutor(id);
+    if(!a){ return render($biblio.generarHTMLListadoAutores()); }
+    render(a.generarHTMLPropiedades());
+}
+
+function vistaBiblioteca(id){
+    const b = $biblio.buscarBiblioteca(id);
+    if(!b){ return render($biblio.generarHTMLListadoBiblioteca()); }
+    render(b.generarHTMLPropiedades($biblio.librosDeBiblioteca(id)));
+}
+
+const clics = {
+    'biblio-libro-listar':      () => pintar($biblio.generarHTMLListadoLibros()),
+    'biblio-autor-listar':      () => pintar($biblio.generarHTMLListadoAutores()),
+    'biblio-biblioteca-listar': () => pintar($biblio.generarHTMLListadoBiblioteca()),
+
+    'biblio-libro-crear': () =>  pintar(new Libro().generarHTMLCreacion($biblio.listaAutores(), $biblio.listaBibliotecas())),
+    'biblio-libro-ver': id => vistaLibro(id),   // CORREGIDO: antes llamaba buscarLibro() sin id y usaba l.libroid como autor
+    'biblio-libro-editar': id => pintar($biblio.buscarLibro(id).generarHTMLEdicion($biblio.listaAutores(), $biblio.listaBibliotecas())),
+    'biblio-libro-borrar': id => { $biblio.borrarLibro(id); pintar($biblio.generarHTMLListadoLibros()); },
+    'biblio-libro-listar-prestamos': id => pintar($biblio.buscarLibro(id).generarHTMLLIstadoPrestamos()),
+    'biblio-libro-prestar':   id => { const l = $biblio.buscarLibro(id); $biblio.crearPrestamo(l);   clics['biblio-libro-ver'](id); },
+    'biblio-libro-devolver':  id => { const l = $biblio.buscarLibro(id); $biblio.devolverPrestamo(l); clics['biblio-libro-ver'](id); },
+
+    'biblio-autor-crear': () => pintar(new Autor().generarHTMCreacin()),
+    'biblio-autor-ver': id => pintar($biblio.buscarAutor(id).generarHTMLPropiedades()),
+    'biblio-autor-editar': id => pintar($biblio.buscarAutor(id).generarHTMLEdicion()),
+    'biblio-autor-borrar': id => {
+        $biblio.borrarAutor(id); 
+        pintar($biblio.generarHTMLListadoAutores());
+    },
+    'biblio-autor-quitar-libro': (id, boton) => {
+        const autor = $biblio.buscarAutor(id);
+        const pos = autor.libros.indexOf(boton.dataset.titulo);
+        if(pos !== -1){
+            autor.libros.splice(pos, 1);
+        }
+        pintar(autor.generarHTMLPropiedades());
+    },
+
+    'biblio-biblioteca-crear': () => pintar(new Biblioteca().generarHTMLCreacion()),
+    'biblio-biblioteca-ver': id => vistaBiblioteca(id),   // AÑADIDO: faltaba el botón Ver de bibliotecas
+    'biblio-biblioteca-editar': id => pintar($biblio.buscarBiblioteca(id).generarHTMLEdicion()),
+    'biblio-biblioteca-borrar': id => {
+        $biblio.borrarBiblioteca(id);
+        pintar($biblio.generarHTMLListadoBiblioteca());
+    }
+};
+
+document.addEventListener('click', e => {
+    const boton = e.target.closest('button');
+
+    if(!boton){
+        return;
+    }
+    const clase = [...boton.classList].find(c => clics[c]);
+    if(clase){
+        clics[clase](boton.dataset.id, boton);
+    }
+});
+
+const envios = {
+    'biblio-libro-form-crear': d => ({
+        ok: $biblio.crearLibro({ titulo: d.titulo, isbn: d.isbn, autorid: d.autorId, bibliotecaid: d.bibliotecaId }),
+        volver: () => render($biblio.generarHTMLListadoLibros())
+    }),
+    'biblio-libro-form-editar': (d, id) => ({
+        ok: $biblio.editarLibro(id, d),
+        volver: () => vistaLibro(id)
+    }),
+    'biblio-autor-form-crear': d => ({
+        ok: $biblio.crearAutor(d),
+        volver: () => render($biblio.generarHTMLListadoAutores())
+    }),
+    'biblio-autor-form-editar': (d, id) => ({
+        ok: $biblio.editarAutor(id, d),
+        volver: () => vistaAutor(id)
+    }),
+    'biblio-autor-form-anadir-libro': (d, id) => ({
+        ok: $biblio.anadirLibroAAutor(id, d.titulo),
+        volver: () => vistaAutor(id)
+    }),
+    'biblio-biblioteca-form-crear': d => ({
+        ok: $biblio.crearBiblioteca(d),
+        volver: () => render($biblio.generarHTMLListadoBiblioteca())
+    }),
+    'biblio-biblioteca-form-editar': (d, id) => ({
+        ok: $biblio.editarBiblioteca(id, d),
+        volver: () => vistaBiblioteca(id)
+    }),
+};
+
+document.addEventListener('submit', e => {
+    const form = e.target;
+    const clase = [...form.classList].find(c => Object.hasOwn(envios, c));
+    if(!clase) return;
+    e.preventDefault();
+
+    const datosForm = Object.fromEntries(new FormData(form));   // { titulo: '...', isbn: '...' }
+    const { ok, volver } = envios[clase](datosForm, form.dataset.id);
+
+    if(!ok){
+        alert('Los datos no son válidos o ya existen.');
+        return;
+    }
+    volver();
+});
+
+const buscador = document.querySelector('#buscador');
+buscador.addEventListener('submit', e => {
+    e.preventDefault();
+    const { texto, tipo } = Object.fromEntries(new FormData(buscador));
+    const resultados = tipo === 'autores'
+        ? $biblio.buscarLibroPorAutor(texto)
+        : $biblio.buscarLibroPorTitulo(texto);
+    render($biblio.generarHTMLResultadoBuscador(resultados, tipo));
 });
