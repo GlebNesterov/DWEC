@@ -49,8 +49,8 @@ const $biblio = (function (){
             <div>${a.libros.length}</div>
             <div>
                 <button data-accion="ver" data-id="${a.autorid}">Ver</button>
-                <button data-accion="borrar" data-id="${a.autorid}">Editar</button>
-                <button data-accion="editar" data-id="${a.autorid}">Borrar</button>
+                <button data-accion="borrar" data-id="${a.autorid}">Borrar</button>
+                <button data-accion="editar" data-id="${a.autorid}">Editar</button>
             </div>
         </div>`).join('');
 
@@ -94,38 +94,15 @@ const $biblio = (function (){
         `;
     }
 
-    /*
-    function filaLibro(l, conAcciones = true) {
-        const autor = buscarAutor(l.autorid);
-        const biblio = buscarBiblioteca(l.bibliotecaid);
-        const acciones = conAcciones ? `
-            <button data-accion="ver" data-id="${l.libroid}">Ver</button>
-            <button data-accion="editar" data-id="${l.libroid}">Editar</button>
-            <button data-accion="borrar" data-id="${l.libroid}">Borrar</button>`
-            : `<button data-accion="ver data-id="${l.libroid}">Ver</button>`;
-        return `
-            <div class="biblio-tabla-fila">
-                <div>${esc(l.titulo)}</div>
-                <div>${esc(l.isbn)}</div>
-                <div>${autor ? esc(autor.nombre) : '—'}</div>
-                <td>${biblio ? esc(biblio.nombre) : '—'}</div>
-                <div>${l.estaDisponible ? 'Disponible' : 'Prestado'}</div>
-                <div>${acciones}</div>
-            </div>`;
-    }
-    */
-
-
     function generarHTMLListadoLibros(){
         
-
         const filas = libros.map(i =>`
             <div class="biblio-tabla-fila">
                     <div>${esc(i.titulo)}</div>
                     <div>${esc(i.isbn)}</div>
                     <div>${buscarAutor(i.autorid) ? buscarAutor(i.autorid).nombre : '--' }</div>
                     <div>${buscarBiblioteca(i.bibliotecaid) ? buscarBiblioteca(i.bibliotecaid).nombre : '--' }</div>
-                    <div>${i.estaDisponible ? 'Prestado' : 'Disponible'}</div>
+                    <div>${i.estaDisponible ? 'Disponible' : 'Prestado'}</div>
                     <div>
                         <button data-accion="ver" data-id="${i.libroid}">Ver</button>
                         <button data-accion="borrar" data-id="${i.libroid}">Borrar</button>
@@ -147,34 +124,39 @@ const $biblio = (function (){
         `;
     }
 
-    function generarHTMListadoBuscador(){
+    function generarHTMListadoBuscador(resultados, tipo){
         if (resultados.length === 0) {
             return `<section><h2>Resultados</h2><p>No se han encontrado ${tipo}.</p></section>`;
         }
 
         if (tipo === 'autores') {
             const filas = resultados.map(a => `
-                <tr>
-                    <td>${esc(a.nombre)}</td>
-                    <td>${esc(a.nacionalidad)}</td>
-                    <td>${a.libros.map(esc).join(', ')}</td>
-                    <td><button class="biblio-autor-ver" data-id="${a.autorid}">Ver</button></td>
-                </tr>`).join('');
+                <div class="biblio-tabla-fila">
+                    <div>${esc(a.nombre)}</div>
+                    <div>${esc(a.nacionalidad)}</div>
+                    <div>${a.libros.map(esc).join(', ')}</div>
+                    <div><button data-accion="ver" data-id="${a.autorid}">Ver</button></div>
+                </div>`).join('');
             return `
                 <section>
                     <h2>Autores encontrados (${resultados.length})</h2>
-                    <table>
-                        <thead><tr><th>Nombre</th><th>Nacionalidad</th><th>Libros</th><th>Acciones</th></tr></thead>
-                        <tbody>${filas}</tbody>
-                    </table>
-                </section>    
+                    <div class="biblio-tabla">
+                        <div class="biblio-tabla-fila biblio-cabecera">
+                            <div>Nombre</div><div>Nacionalidad</div><div>Libros</div><div>Acciones</div>
+                        </div>
+                        ${filas}
+                    </div>
+                </section>
             `;
         }
 
         return `
             <section>
                 <h2>Libros encontrados (${resultados.length})</h2>
-                <table>${cabeceraLibros}<tbody>${resultados.map(l => filaLibro(l, false)).join('')}</tbody></table>
+                <div class="biblio-tabla">
+                    ${cabeceraLibros}
+                    ${resultados.map(l => filaLibro(l, false)).join('')}
+                </div>
             </section>`;
     }
 
@@ -199,7 +181,7 @@ const $biblio = (function (){
         //autores.filter(a => a.nombre.toLowerCase().includes(autor.toLowerCase().trim()));
     }
 
-    console.log(buscarLibroPorAutor('Isabel Allende'));
+    //console.log(buscarLibroPorAutor('Isabel Allende')); // Lista de 3 libros
 
     /*
     console.log('Libros:', libros.length, '| último ID:', ultimoIdLibro);       // 12 | 112
@@ -405,7 +387,7 @@ const $biblio = (function (){
         }
 
         const prestamo = {fechaPrestamo: new Date().toISOString().slice(0, 10)};
-        libro.prestamo.push(prestamo);
+        libro.prestamos.push(prestamo);
 
         return prestamo;
     }
@@ -416,7 +398,7 @@ const $biblio = (function (){
         }
 
         const prestamo = libro.prestamos.find(p => !p.fechaDevolucion);
-        prestamo.fechaDevolucion = new Date().toISOString.slice(0,10);
+        prestamo.fechaDevolucion = new Date().toISOString().slice(0,10);
 
         return prestamo;
     }

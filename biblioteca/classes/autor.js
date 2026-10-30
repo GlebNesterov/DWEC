@@ -65,14 +65,14 @@ class Autor {
 
     generarHTMLPropiedades(){
         const filas = this.#libros.map(titulo => `
-            <tr>
-                <td>${esc(titulo)}</td>
-                <td>
+            <div class="biblio-tabla-fila">
+                <div>${esc(titulo)}</div>
+                <div>
                     <button class="biblio-autor-quitar-libro"
                             data-id="${this.#_autorid}"
                             data-titulo="${esc(titulo)}">Eliminar</button>
-                </td>
-            </tr>`).join('');
+                </div>
+            </div>`).join('');
 
         return `
             <section class="biblio-autor-detalle" data-id="${this.#_autorid}">
@@ -83,10 +83,12 @@ class Autor {
             <h3>Libros publicados</h3>
             ${this.#libros.length === 0
                 ? '<p>Este autor no tiene libros registrados.</p>'
-                : `<table>
-                    <thead><tr><th>Título</th><th>Acciones</th></tr></thead>
-                    <tbody>${filas}</tbody>
-                    </table>`}
+                : `<div class="biblio-tabla">
+                    <div class="biblio-tabla-fila biblio-cabecera">
+                        <div>Título</div><div>Acciones</div>
+                    </div>
+                    ${filas}
+                </div>`}
 
             <form class="biblio-autor-form-anadir-libro" data-id="${this.#_autorid}">
                 <input type="text" name="titulo" placeholder="Título del nuevo libro" required>

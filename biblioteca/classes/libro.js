@@ -146,20 +146,22 @@ class Libro{
 
     generarHTMLLIstadoPrestamos(){
         const filas = this.#prestamos.map(p => `
-            <tr>
-                <td>${esc(p.fechaPrestamo)}</td>
-                <td>${p.fechaDevolucion ? esc(p.fechaDevolucion) : '<em>Pendiente de devolución</em>'}</td>
-            </tr>`).join('');
+            <div class="biblio-tabla-fila">
+                <div>${esc(p.fechaPrestamo)}</div>
+                <div>${p.fechaDevolucion ? esc(p.fechaDevolucion) : '<em>Pendiente de devolución</em>'}</div>
+            </div>`).join('');
 
         return `
             <section>
             <h2>Préstamos de «${esc(this.#titulo)}»</h2>
             ${this.#prestamos.length === 0
                 ? '<p>Este libro nunca se ha prestado.</p>'
-                : ` <table>
-                        <thead><tr><th>Fecha de préstamo</th><th>Fecha de devolución</th></tr></thead>
-                        <tbody>${filas}</tbody>
-                    </table>`}
+                : `<div class="biblio-tabla">
+                        <div class="biblio-tabla-fila biblio-cabecera">
+                            <div>Fecha de préstamo</div><div>Fecha de devolución</div>
+                        </div>
+                        ${filas}
+                    </div>`}
             <button class="biblio-libro-ver" data-id="${this.#_libroid}">Volver al libro</button>
         </section>
         `;
