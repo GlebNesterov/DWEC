@@ -94,7 +94,6 @@ const $biblio = (function (){
         `;
     }
 
-    // AÑADIDO: faltaban cabeceraLibros y filaLibro (los usa el buscador)
     const cabeceraLibros = `
         <div class="biblio-tabla-fila biblio-cabecera">
             <div>Titulo</div><div>ISBN</div><div>Autor</div><div>Biblioteca</div><div>Estado</div><div>Acciones</div>
@@ -157,7 +156,6 @@ const $biblio = (function (){
 
     function generarHTMLListadoLibros(){
         
-        // CORREGIDO: los botones usaban "l.libroid" y aquí la variable es "i"
         const filas = libros.map(i =>`
             <div class="biblio-tabla-fila">
                     <div>${esc(i.titulo)}</div>
@@ -186,9 +184,6 @@ const $biblio = (function (){
         `;
     }
 
-    // CORREGIDO: eliminada generarHTMListadoBuscador (duplicada, con data-accion);
-    // ya tienes generarHTMLResultadoBuscador
-
     // BUSCAR LIBRO POR NOMBRE O AUTOR
 
     function buscarLibroPorTitulo(titulo){
@@ -198,12 +193,15 @@ const $biblio = (function (){
         return libros.filter(l => l.titulo.toLowerCase().includes(titulo.toLowerCase().trim()));
     }
 
-    // CORREGIDO: el buscador espera AUTORES (no libros) cuando el tipo es 'autores'
     function buscarLibroPorAutor(autor){
         if(!autor){
-            return [...autores];
+            return [...libros];
         }
-        return autores.filter(a => a.nombre.toLowerCase().includes(autor.toLowerCase().trim()));
+        
+        let librosAutor = libros;
+
+        librosAutor = librosAutor.filter(l => buscarAutor(l.autorid).nombre.toLowerCase() === autor.toLowerCase().trim());
+        return librosAutor;
     }
 
     //console.log(buscarLibroPorAutor('Isabel Allende')); // Lista de 3 libros
@@ -266,10 +264,10 @@ const $biblio = (function (){
     function crearAutor(autor){
         let nacionalidad = autor.nacionalidad?.trim();
         let nombre = autor.nombre?.trim();
-        let biografia = autor.biografia?.trim() ?? '';   // CORREGIDO: la biografía es opcional
+        let biografia = autor.biografia?.trim() ?? '';   
 
         
-        if(!nombre || !nacionalidad){                    // CORREGIDO: ya no se exige biografía
+        if(!nombre || !nacionalidad){                
             return null;
         }
         let nuevo = new Autor(++ultimoIdAutor, nombre, nacionalidad, biografia, autor.libros);
@@ -345,7 +343,7 @@ const $biblio = (function (){
                 autor.libros.splice(pos, 1);
             }
         }
-        return libro;   // CORREGIDO: antes solo devolvía el libro si el autor existía
+        return libro;  
     }
 
     /*
@@ -446,9 +444,9 @@ const $biblio = (function (){
         }
 
         const nuevo = new Libro(viejo.libroid, datos.titulo.trim(), datos.isbn.trim(),Number(datos.autorId), Number(datos.bibliotecaId), viejo.prestamos);
-        libros = libros.map(l => l.libroid === viejo.libroid ? nuevo : l);   // CORREGIDO: era ": 1"
+        libros = libros.map(l => l.libroid === viejo.libroid ? nuevo : l); 
 
-        // AÑADIDO: el título nuevo se guarda en el autor (antes solo se quitaba el viejo)
+
         const autorNuevo = buscarAutor(nuevo.autorid);
         if(autorNuevo){
             autorNuevo.libros.push(nuevo.titulo);
@@ -479,7 +477,6 @@ const $biblio = (function (){
         return nuevo;
     }
 
-    // AÑADIDO: faltaban estas dos funciones
     function librosDeBiblioteca(id){
         return libros.filter(l => l.bibliotecaid === Number(id));
     }
@@ -503,14 +500,14 @@ const $biblio = (function (){
         generarHTMLListadoAutores,
         generarHTMLListadoBiblioteca,
         generarHTMLListadoLibros,
-        generarHTMLResultadoBuscador,   // CORREGIDO: antes exportaba generarHTMListadoBuscador
+        generarHTMLResultadoBuscador,  
         buscarLibro,
         buscarAutor,
         buscarLibroPorTitulo,
         buscarLibroPorAutor,
         buscarBiblioteca,
-        librosDeBiblioteca,             // AÑADIDO
-        anadirLibroAAutor,              // AÑADIDO
+        librosDeBiblioteca,            
+        anadirLibroAAutor,              
         crearLibro,
         crearAutor,
         crearBiblioteca,
@@ -549,7 +546,7 @@ listarBiblio.addEventListener('click', ()=>{
 const app = document.querySelector('#app');
 
 const pintar = html => app.innerHTML = html;
-const render = pintar;   // AÑADIDO: "render" se usaba pero no existía
+const render = pintar;
 
 function vistaLibro(id){
     const l = $biblio.buscarLibro(id);
@@ -575,7 +572,7 @@ const clics = {
     'biblio-biblioteca-listar': () => pintar($biblio.generarHTMLListadoBiblioteca()),
 
     'biblio-libro-crear': () =>  pintar(new Libro().generarHTMLCreacion($biblio.listaAutores(), $biblio.listaBibliotecas())),
-    'biblio-libro-ver': id => vistaLibro(id),   // CORREGIDO: antes llamaba buscarLibro() sin id y usaba l.libroid como autor
+    'biblio-libro-ver': id => vistaLibro(id),  
     'biblio-libro-editar': id => pintar($biblio.buscarLibro(id).generarHTMLEdicion($biblio.listaAutores(), $biblio.listaBibliotecas())),
     'biblio-libro-borrar': id => { $biblio.borrarLibro(id); pintar($biblio.generarHTMLListadoLibros()); },
     'biblio-libro-listar-prestamos': id => pintar($biblio.buscarLibro(id).generarHTMLLIstadoPrestamos()),
@@ -599,7 +596,7 @@ const clics = {
     },
 
     'biblio-biblioteca-crear': () => pintar(new Biblioteca().generarHTMLCreacion()),
-    'biblio-biblioteca-ver': id => vistaBiblioteca(id),   // AÑADIDO: faltaba el botón Ver de bibliotecas
+    'biblio-biblioteca-ver': id => vistaBiblioteca(id), 
     'biblio-biblioteca-editar': id => pintar($biblio.buscarBiblioteca(id).generarHTMLEdicion()),
     'biblio-biblioteca-borrar': id => {
         $biblio.borrarBiblioteca(id);
@@ -656,7 +653,7 @@ document.addEventListener('submit', e => {
     if(!clase) return;
     e.preventDefault();
 
-    const datosForm = Object.fromEntries(new FormData(form));   // { titulo: '...', isbn: '...' }
+    const datosForm = Object.fromEntries(new FormData(form));
     const { ok, volver } = envios[clase](datosForm, form.dataset.id);
 
     if(!ok){
