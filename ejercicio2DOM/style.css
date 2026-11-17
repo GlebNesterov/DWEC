@@ -1,0 +1,10 @@
+.resaltado{
+    outline-color: aquamarine;
+    box-shadow: 20%;
+}
+
+.contenedorDepu{
+    border: 1px solid;
+    border-color: blueviolet;
+    border-radius: 5px;
+}
