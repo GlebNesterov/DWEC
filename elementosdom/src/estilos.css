@@ -1,0 +1,17 @@
+.miClase{
+    color:red;
+    font-weight: bold;
+}
+
+#principal{
+    display: flex;
+    flex-direction:row;
+    justify-content: space-evenly;
+}
+
+.parrafoCreado{
+    background-color: black;
+    color:white;
+    padding:5px;
+    font-weight: bold;
+}
