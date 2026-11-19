@@ -1,7 +1,7 @@
 class NodoInspector{
     #nodoActual;
 
-    constructor (nodoActual){
+    constructor (nodoActual = document.body){
         this.#nodoActual = nodoActual;
     }
 
@@ -26,7 +26,7 @@ class NodoInspector{
     }
     
     obtenerInfo(){
-        const textoNodo = Array.from(this.#nodoActual,childNodes)
+        const textoNodo = Array.from(this.#nodoActual.childNodes)
                                 .filter(n => n.nodeType === Node.TEXT_NODE)
                                 .map(n => n.textContent.trim())
                                 .filter(t => t !== '').join('');
@@ -36,6 +36,10 @@ class NodoInspector{
             clases: Array.from(this.#nodoActual.classList),
             texto: textoNodo
         }
+    }
+
+    irARaiz(){
+        this.#nodoActual = document.body;
     }
 
     irAlPadre(){
@@ -69,9 +73,9 @@ class NodoInspector{
     }
 
     #actualizarNodo(nuevoSeleccionado){
-       this.#nodoActual.toggle('.resaltado');
-       this.#nodoActual = document.querySelector(nuevoSeleccionado);
-       this.#nodoActual.toggle('.resaltado');
+       this.#nodoActual.classList.toggle('resaltado');
+       this.#nodoActual = nuevoSeleccionado;
+       this.#nodoActual.classList.toggle('resaltado');
     }
 }
 
