@@ -5,6 +5,10 @@ class NodoInspector{
         this.#nodoActual = nodoActual;
     }
 
+    get nodoActual(){
+        return this.#nodoActual;
+    }
+
     get esRaiz(){
         return this.#nodoActual === document.body;
     }

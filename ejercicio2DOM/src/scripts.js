@@ -2,13 +2,44 @@
 import NodoInspector from "../src/nodoInspector.js";
 
 const $depurador = (function (){
-    const inspector = new NodoInspector();
-    let zonaInfo = null;
+    let elemento = null;
+    let panelPintado = false;
+    const elementosBody = document.querySelectorAll('*');
+    const nodo = new NodoInspector(elemento);
+    
 
-    function activarDepurador(){
-        panel();
+    function panel(){
+        const conteneder = document.createElement('div');
+        conteneder.classList.add('contenedorDepu');
+        const botones = [
+            'raiz',
+            'padre',
+            'primer hijo',
+            'ultimo hijo',
+            'hermano anterior',
+            'hermano siguiente'
+        ];
+        
+        botones.map(texto => {
+                const boton =document.createElement('button');
+                boton.textContent = texto;
+                conteneder.appendChild(boton);
+            }
+        );
+
+        document.body.append(conteneder);
+        panelPintado = true;
     }
 
+    function activarDepurador(){
+        Array.from(elementosBody).forEach(el =>
+            el.addEventListener('click', ()=>{
+                if(!panelPintado)panel();
+            })
+        );
+    }
+
+    /*
     function panel(){
         //const info = JSON.stringify(inspector.obtenerInfo());
         const contenedor = document.createElement("div");
@@ -22,10 +53,13 @@ const $depurador = (function (){
         document.body.appendChild(contenedor);
         //parrafo.innerHTML = info; 
     }
+    */
 
     function desactivarDepurador(){
 
     }
+
+    
 
     return {
         activarDepurador,
