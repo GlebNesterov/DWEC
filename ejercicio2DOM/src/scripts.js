@@ -8,14 +8,14 @@ let panel = null;
 const $depurador = (function (){
     function activarDepurador(){
         if(panel === null) panel = creaPanel();
-        panel.style.display = '';
+        panel.hidden = false;
         panelPintado = true;    
     }
 
     function desactivarDepurador(){
         if(panelPintado){
-            panelPintado = false;
-            panel.style.display = 'none';
+            panelPintado = true;
+            panel.hidden = false;
         }
     }
 
@@ -26,7 +26,12 @@ const $depurador = (function (){
 })();
 
 window.addEventListener('load', ()=>{
-    window.addEventListener('click' ,()=>{
-        if (!panelPintado) $depurador.activarDepurador();
+    window.addEventListener('keydown' ,(e)=>{
+        if(e.key.toLowerCase('e')){
+            e.preventDefault;
+            if (!panelPintado) $depurador.activarDepurador();
+            else $depurador.desactivarDepurador();
+        }
+        
     })
 });

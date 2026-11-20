@@ -35,6 +35,8 @@ export function creaPanel() {
       contenedor.appendChild(boton);
       botonesHTML[texto] = boton;
     });
+    document.body.append(contenedor);
+
 
     botonesHTML['raiz'].addEventListener('click', ()=>{
         nodo.irARaiz();
@@ -83,50 +85,6 @@ export function creaPanel() {
         botonesHTML['hermano-siguiente'].disabled = nodo.esRaiz || nodo.esUltimoHijo;
     }
 
-
-
     document.body.append(contenedor);
     return contenedor;
   }
-
-/*
-        switch (boton.dataset.accion) {
-        case "raiz": {
-            boton[].addEventListener("click", () => {
-            nodo.irARaiz();
-            console.log("has clicado raiz");
-            });
-        }
-        case "padre": {
-            boton.addEventListener("click", () => {
-            nodo.irAlPadre();
-            console.log("has clicado padre");
-            //this.panel();
-            });
-        }
-        case "primer-hijo": {
-            boton.addEventListener("click", () => {
-            this.nodo.irAlPrimerHijo();
-            //this.panel();
-            });
-        }
-        case "ultimo-hijo": {
-            boton.addEventListener("click", () => {
-            this.nodo.irAlUltimoHijo();
-            //this.panel();
-            });
-        }
-        case "hermano-anterior": {
-            boton.addEventListener("click", () => {
-            this.nodo.irAlAnteriorHermano();
-            //this.panel();
-            });
-        }
-        case "hermano-siguiente": {
-            boton.addEventListener("click", () => {
-            this.nodo.irAlSiguienteHermano();
-            //this.panel();
-            });
-        }
-        }
-    */
