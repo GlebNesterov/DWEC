@@ -7,7 +7,7 @@ const nodo = new NodoInspector();
   
 
 function informacion() {
-    return JSON.stringify(nodo.obtenerInfo());
+    return JSON.stringify(nodo.obtenerInfo(), null, 4);
 }
 
 export function creaPanel() {
@@ -23,6 +23,8 @@ export function creaPanel() {
         "hermano-siguiente"
     ];
 
+    const botonesHTML = {};
+
     let info = document.createElement("textarea");
     info.readOnly = true;
     info.textContent = informacion();
@@ -31,38 +33,60 @@ export function creaPanel() {
       const boton = document.createElement("button");
       boton.textContent = texto;
       contenedor.appendChild(boton);
+      botonesHTML[texto] = boton;
     });
 
-    botones['raiz'].addEventListener('click', ()=>{
-        nodo.irAlPadre();
-        info.textContent = informacion();
-        console.log("has clicado padre");
-    })
+    botonesHTML['raiz'].addEventListener('click', ()=>{
+        nodo.irARaiz();
+        actualizarPane();
+        console.log("has clicado raiz");
+    });
 
-    botones['padre'].addEventListener('click', ()=>{
+    botonesHTML['padre'].addEventListener('click', ()=>{
         nodo.irAlPadre();
-        info.textContent = informacion();
+        actualizarPane();
         console.log("has clicado padre");
-    })
+    });
 
-    botones['primer-hijo'].addEventListener('click', ()=>{
+    botonesHTML['primer-hijo'].addEventListener('click', ()=>{
         nodo.irAlPrimerHijo();
+        actualizarPane();
         //this.panel();
-    })
+    });
 
-    botones['ultimo-hijo'].addEventListener('click',()=>{
+    botonesHTML['ultimo-hijo'].addEventListener('click',()=>{
         nodo.irAlUltimoHijo();
-    })
+        actualizarPane();
+    });
 
-    botones['hermano-anterior'].addEventListener('click', ()=>{
+    botonesHTML['hermano-anterior'].addEventListener('click', ()=>{
         nodo.irAlAnteriorHermano();
-    })
+        actualizarPane();
+    });
 
-    botones['hermano-siguiente'].addEventListener('click', ()=>{
+    botonesHTML['hermano-siguiente'].addEventListener('click', ()=>{
         nodo.irAlSiguienteHermano();
-    })
+        actualizarPane();
+    });
+
+    function actualizarPane(){
+        info.value = informacion();
+
+        botonesHTML['raiz'].disabled = nodo.esRaiz;
+        botonesHTML['padre'].disabled = nodo.esRaiz;
+
+        botonesHTML['primer-hijo'].disabled = !nodo.tieneHijos;
+        botonesHTML['ultimo-hijo'].disabled = !nodo.tieneHijos;
+
+        botonesHTML['hermano-anterior'].disabled = nodo.esRaiz || nodo.esPrimerHijo;
+
+        botonesHTML['hermano-siguiente'].disabled = nodo.esRaiz || nodo.esUltimoHijo;
+    }
+
+
 
     document.body.append(contenedor);
+    return contenedor;
   }
 
 /*

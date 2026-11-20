@@ -39,7 +39,9 @@ class NodoInspector{
     }
 
     irARaiz(){
-        this.#nodoActual = document.body;
+        if(!this.esRaiz && this.#nodoActual.parentElement){
+            this.#actualizarNodo(this.#nodoActual.parentElement);
+        }
     }
 
     irAlPadre(){
@@ -61,8 +63,8 @@ class NodoInspector{
     }
 
     irAlAnteriorHermano(){
-        if(this.#nodoActual.previouseElementSibling){
-            this.#actualizarNodo(this.#nodoActual.previouseElementSibling);
+        if(this.#nodoActual.previousElementSibling){
+            this.#actualizarNodo(this.#nodoActual.previousElementSibling);
         }
     }
 
