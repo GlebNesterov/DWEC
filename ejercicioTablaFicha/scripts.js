@@ -40,22 +40,29 @@ let alumnos = [];
 alumnos = datos.map(d => new Alumno(d.nombre, d.dni, d.curso, d.asignaturas, d.telefono, d.email));
 //console.log(alumnos);
 
-function crearTabla(alumnos){
+
+function crearTabla(alumnos) {
     const tabla = document.createElement('div');
     tabla.classList.add('tabla');
 
     const cabecera = document.createElement('div');
-    tabla.classList.add('tabla-fila', 'tabla-cabecera');
+    cabecera.classList.add('tabla-fila', 'tabla-cabecera');
 
-    const camposCabecera = `<div>Nombre</div><div>Curso</div><div>Telefono</div><div>Email</div>`;
+    const camposCabecera = `
+        <div>Nombre</div>
+        <div>Curso</div>
+        <div>Telefono</div>
+        <div>Email</div>
+    `;
+
     cabecera.innerHTML = camposCabecera;
 
     const filas = document.createElement('div');
-    filas.classList.add('tabla-fila');
-
 
     alumnos.forEach(a => {
         const fila = document.createElement('div');
+        fila.classList.add('tabla-fila');
+
         fila.innerHTML = `
             <div>${a.nombre}</div>
             <div>${a.curso}</div>
@@ -65,38 +72,16 @@ function crearTabla(alumnos){
 
         filas.appendChild(fila);
     });
-    
+
     tabla.appendChild(cabecera);
     tabla.appendChild(filas);
 
     document.body.append(tabla);
 }
 
+function crearFichas(alumnos){
+
+}
+
+
 crearTabla(alumnos);
-
-/*
-        generarHTMLListado(listaJuguetes) {
-        const filas = listaJuguetes.map(j => `
-            <div class="tabla-fila">
-                    <div>${j.nombre}</div>
-                    <div>${j.marca}</div>
-                    <div>${j.precio}</div>
-                    <div>
-                        <button data-accion="ver" data-id="${j.jugueteId}">Ver</button>
-                        <button data-accion="borrar" data-id="${j.jugueteId}">Borrar</button>
-                    </div>
-            </div>`).join("");
-
-        return `
-            <div data-componente="listado" class="jg-tabla">
-                <div class="tabla-fila cabecera">
-                    <div>Nombre</div><div>Marca</div><div>Precio</div><div>Acciones</div>
-                </div>
-                ${filas}
-                <button data-accion="nuevo">Nuevo juguete</button>
-            </div>
-            `;
-    }
-
-*/
-
