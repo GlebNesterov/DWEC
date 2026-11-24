@@ -80,8 +80,34 @@ function crearTabla(alumnos) {
 }
 
 function crearFichas(alumnos){
+    for (const a of alumnos) {
+        const ficha = document.createElement('div');
+        ficha.classList.add('ficha');
 
+        let asignat = alumnos.map(a => `
+            <ul>
+                ${a.asignaturas.map(as => 
+                        `<li>
+                            ${as}
+                        </li>`
+                    )}
+            </ul>
+        `
+        );
+
+
+        ficha.innerHTML = `
+            <div>${a.nombre}</div>
+            <div>${a.nombre}</div>
+            <div>${a.curso}</div>
+            <div>${asignat}</div>
+            <div>${a.telefono}</div>
+            <div>${a.email}</div>
+        `;
+
+        document.body.append(ficha);
+    }
 }
 
-
-crearTabla(alumnos);
+crearFichas(alumnos);
+//crearTabla(alumnos);
